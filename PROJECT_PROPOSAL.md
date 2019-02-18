@@ -19,13 +19,13 @@ Conrad Harley (harley3@illinois.edu)
 ```
 # Overview
 
-Since online services has been widely developed and being used, the toxicity or salty message in the chat, message, or comment
-became a problem. 
-Many online systems has its own profanity filtering embedded in their system, but those are all pre-registered word based
-so that the filtering doesn't work for new words or expressions, which might not have any bad word in it at all, 
-but it's toxic.
+Online platforms allow people to express their opinions freely and stimulates collaborations across the globe. Unfortunately what comes with the anonymous identiy is the loosened inhibition on making profaned and biased remarks. 
+Many online systems has its own profanity filtering embedded in their system, but most of those are all pre-registered word based. It lacks deeper contextual understanding on sentences which are toxic but may not contain any banned words at all. 
 
-Also, every system should have developed their own profaility filtering system, although it's functionality is not much different than others and actually good candidate to be PaaS or SaaS service.
+Thus we propose a new toxic filtering systems with deeper contextual understanding to flag toxic remarks. 
+We will use docker and Kubernetes so it's easily portable on different systems and scales very quickly. 
+We will also use HDFS to store the data we've collected from chats and share between systems.
+Finally we will demonstrate our application in a web chat app
 
 [TODO] You probably get some idea what I'm trying to say. Please change the sentence that sounds good and cool, but stay focus on minimizing the work we need to for final project... Check https://www.coursera.org/learn/cs-498/supplement/ewbEI/course-project-overview for what project proposal want us to do. 
 
