@@ -25,8 +25,9 @@ Many online systems has its own profanity filtering embedded in their system, bu
 so that the filtering doesn't work for new words or expressions, which might not have any bad word in it at all, 
 but it's toxic.
 
-Also, every system should have developed their own profaility filtering system, although it's functionality is not much different
-than others and actually good candidate to be PaaS or SaaS service.
+Also, every system should have developed their own profaility filtering system, although it's functionality is not much different than others and actually good candidate to be PaaS or SaaS service.
+
+[TODO] You probably get some idea what I'm trying to say. Please change the sentence that sounds good and cool, but stay focus on minimizing the work we need to for final project... Check https://www.coursera.org/learn/cs-498/supplement/ewbEI/course-project-overview for what project proposal want us to do. 
 
 # What we are going to make 
 
@@ -34,6 +35,11 @@ That said, our team is going to make a prototype of PaaS/SaaS service that provi
 
 * machine leanring based toxicity/salty chat filtering engine
 * and integerated application that uses the engine ( probably simple web chat app and things like chatbot )
+
+# dataset
+
+Unfortunately, there are very limited toxic/comment we can utilize. We weren't able to find those dataset exists in public.<br/>
+Only thing we found so far is Kaggle's toxic comment classification challenge dataset and we are going to use the set to train our classifier. https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge
 
 # Solutions for the project
 
