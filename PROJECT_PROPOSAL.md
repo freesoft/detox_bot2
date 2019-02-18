@@ -12,10 +12,10 @@ PLEASE read following article briefly so that you will get some idea what to say
 ## CS498 Cloud Computing Application, Spring 2019
 
 ```
-[ Studetns Name here with email(or uiuc netid) ]
-[ Studetns Name here with email(or uiuc netid) ]
-[ Studetns Name here with email(or uiuc netid) ]
-[ Studetns Name here with email(or uiuc netid) ]
+Wonhee Jung (wonheej2@illinois.edu)
+Kevin Mackie (kevindm2@illinois.edu)
+Cindy Tseng (cindyst2@illinois.edu)
+Conrad Harley (harley3@illinois.edu)
 ```
 # Overview
 
