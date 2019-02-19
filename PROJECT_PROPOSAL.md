@@ -36,7 +36,7 @@ state-of-the-art distributed systems technology for processing and storage (HDFS
 size.
 
 The framework will be documented in a final report that presents the architecture, development, and use of this system
-in the context of a real-world web chat application as a motivating example.
+in the context of a web chat application and Twitch chatBot as motivating examples.
 
 [TODO] You probably get some idea what I'm trying to say. Please change the sentence that sounds good and cool, but stay focus on minimizing the work we need to for final project... Check https://www.coursera.org/learn/cs-498/supplement/ewbEI/course-project-overview for what project proposal want us to do. 
 
