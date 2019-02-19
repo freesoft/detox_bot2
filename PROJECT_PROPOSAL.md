@@ -19,13 +19,24 @@ Conrad Harley (harley3@illinois.edu)
 ```
 # Overview
 
-Since online services has been widely developed and being used, the toxicity or salty message in the chat, message, or comment
-became a problem. 
-Many online systems has its own profanity filtering embedded in their system, but those are all pre-registered word based
-so that the filtering doesn't work for new words or expressions, which might not have any bad word in it at all, 
-but it's toxic.
+Online platforms allow people to express their opinions freely, and stimulate collaboration across the globe. 
+Unfortunately, online interaction may often come with loosened inhibitions in making profane, bigoted, or offensive 
+remarks. We refer to such unwelcome remarks as "toxic chat". 
 
-Also, every system should have developed their own profaility filtering system, although it's functionality is not much different than others and actually good candidate to be PaaS or SaaS service.
+Online systems may or may not have their own embedded profanity filtering, and those that do typically use
+pre-registered terms and simple pattern matching. This approach lacks the deeper contextual understanding needed to 
+identify sentences that are toxic but that may not contain banned terms. 
+
+Thus we propose a new toxic chat filtering system that differentiates itself in that a) its filtering is based on
+machine learning and deeper contextual analysis, and b) it is deployed as a scalable and easily integrated web
+framework that can be adapted to any source of text for online interaction of any size. 
+
+The platform will be based on Docker and Kubernetes for easy portability between different types of systems. It will use 
+state-of-the-art distributed systems technology for processing and storage (HDFS), to allow for rapid scaling to any 
+size while maintaining a shared file space (HDFS) between each Kubernetes Zone.
+
+The framework will be documented in a final report that presents the architecture, development, and use of this system
+in the context of a web chat application and Twitch chatBot as motivating examples.
 
 [TODO] You probably get some idea what I'm trying to say. Please change the sentence that sounds good and cool, but stay focus on minimizing the work we need to for final project... Check https://www.coursera.org/learn/cs-498/supplement/ewbEI/course-project-overview for what project proposal want us to do. 
 
