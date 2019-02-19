@@ -54,7 +54,7 @@ Only thing we found so far is Kaggle's toxic comment classification challenge da
 
 # Solutions for the project
 
-The team ill use following technologies and solutions to be able to cover high volume/traffic in the future.
+The team will use following technologies and solutions to be able to cover high volume/traffic in the future.
 
 * Docker - to distribute the engine/app easily  to mulitple instance 
 * Kubernetes - make deploy easy and quickly scale out
