@@ -31,7 +31,7 @@ Thus we propose a new toxic chat filtering system that differentiates itself in 
 machine learning and deeper contextual analysis, and b) it is deployed as a scalable and easily integrated web
 framework that can be adapted to any source of text for online interaction of any size. 
 
-The platform will be based on Docker and Kubernetes for easy portablity between different types of systems. It will use 
+The platform will be based on Docker and Kubernetes for easy portability between different types of systems. It will use 
 state-of-the-art distributed systems technology for processing and storage (HDFS), to allow for rapid scaling to any 
 size while maintaining a shared file space (HDFS) between each Kubernetes Zone.
 
