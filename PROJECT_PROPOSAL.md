@@ -19,13 +19,24 @@ Conrad Harley (harley3@illinois.edu)
 ```
 # Overview
 
-Online platforms allow people to express their opinions freely and stimulates collaborations across the globe. Unfortunately what comes with the anonymous identiy is the loosened inhibition on making profaned and biased remarks. 
-Many online systems has its own profanity filtering embedded in their system, but most of those are all pre-registered word based. It lacks deeper contextual understanding on sentences which are toxic but may not contain any banned words at all. 
+Online platforms allow people to express their opinions freely, and stimulate collaboration across the globe. 
+Unfortunately, online interaction may often come with loosened inhibitions in making profane, bigoted, or offensive 
+remarks. We refer to such unwelcome remarks as "toxic chat". 
 
-Thus we propose a new toxic filtering systems with deeper contextual understanding to flag toxic remarks. 
-We will use docker and Kubernetes so it's easily portable on different systems and scales very quickly. 
-We will also use HDFS to store the data we've collected from chats and share between systems.
-Finally we will demonstrate our application in a web chat app
+Online systems may or may not have their own embedded profanity filtering, and those that do typically use
+pre-registered terms and simple pattern matching. This approach lacks the deeper contextual understanding needed to 
+identify sentences that are toxic but that may not contain banned terms. 
+
+Thus we propose a new toxic chat filtering system that differentiates itself in that a) its filtering is based on
+machine learning and deeper contextual analysis, and b) it is deployed as a scalable and easily integrated web
+framework that can be adapted to any source of text for online interaction of any size. 
+
+The platform will be based on Docker and Kubernetes to be easily portable to different systems. It will use 
+state-of-the-art distributed systems technology for processing and storage (HDFS) to allow for rapid scaling to any 
+size.
+
+The framework will be documented in a final report that presents the architecture, development, and use of this system
+in the context of a real-world web chat application as a motivating example.
 
 [TODO] You probably get some idea what I'm trying to say. Please change the sentence that sounds good and cool, but stay focus on minimizing the work we need to for final project... Check https://www.coursera.org/learn/cs-498/supplement/ewbEI/course-project-overview for what project proposal want us to do. 
 
