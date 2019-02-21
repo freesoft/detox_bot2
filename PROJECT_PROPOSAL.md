@@ -1,13 +1,3 @@
-PLEASE read following article briefly so that you will get some idea what to say in the proposal.<br/> This seciton is not a part of the prpopsal and will be deleted later.
-- https://us.battle.net/forums/en/overwatch/topic/20759196162
-- https://boards.na.leagueoflegends.com/en/c/player-behavior-moderation/Q4nTlURg-why-toxic-players-continue-to-be-toxic-from-a-toxic-playeros-perspective
-- https://us.battle.net/forums/en/overwatch/topic/20747204974
-- https://www.theguardian.com/games/2018/aug/17/tackling-toxicity-abuse-in-online-video-games-overwatch-rainbow-seige
-- https://www.destructoid.com/a-discourse-on-discord-examining-online-toxicity-501984.phtml
-- http://jultika.oulu.fi/files/nbnfioulu-201706022379.pdf
-- https://www.rockpapershotgun.com/2018/03/05/rainbow-six-siege-toxic-chat-bans/
-
-
 # Project proposal - Detox Bot
 ## CS498 Cloud Computing Application, Spring 2019
 
