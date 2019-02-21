@@ -31,39 +31,33 @@ Thus we propose a new toxic chat filtering system that differentiates itself in 
 machine learning and deeper contextual analysis, and b) it is deployed as a scalable and easily integrated web
 framework that can be adapted to any source of text for online interaction of any size. 
 
-The platform will be based on Docker and Kubernetes for easy portability between different types of systems. It will use 
-state-of-the-art distributed systems technology for processing and storage (HDFS), to allow for rapid scaling to any 
+The platform will be based on Docker and Kubernetes for easy deployment and dependency management and to allow for fast scale-out
+to large systems. It will use 
+state-of-the-art distributed systems technology for processing and storage, to allow for rapid scaling to any 
 size while maintaining a shared file space (HDFS) between each Kubernetes Zone.
 
 The framework will be documented in a final report that presents the architecture, development, and use of this system
 in the context of a web chat application and Twitch chatBot as motivating examples.
 
-[TODO] You probably get some idea what I'm trying to say. Please change the sentence that sounds good and cool, but stay focus on minimizing the work we need to for final project... Check https://www.coursera.org/learn/cs-498/supplement/ewbEI/course-project-overview for what project proposal want us to do. 
-
 # What we are going to make 
 
-That said, our team is going to make a prototype of PaaS/SaaS service that provides
+We will create a prototype of PaaS/SaaS service that provides the following specific capabilities:
 
-* machine leanring based toxicity/salty chat filtering engine
-* and integerated application that uses the engine ( probably simple web chat app and things like chatbot )
+* machine-learning-based toxic chat identification and filtering engine
+* integerated web chat application or chatbot that uses the engine to analyze a real-time stream of text
 
-# dataset
+# Dataset
 
-Unfortunately, there are very limited toxic/comment we can utilize. We weren't able to find those dataset exists in public.<br/>
-Only thing we found so far is Kaggle's toxic comment classification challenge dataset and we are going to use the set to train our classifier. https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge
+The only publicly available toxic comment dataset we have been able to find so far is Kaggle's toxic comment classification challenge dataset, which we will use to train our classifier. https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge
 
-# Solutions for the project
+# Cloud system integration and development
 
-The team will use following technologies and solutions to be able to cover high volume/traffic in the future.
+The team will integrate the following technologies and solutions to provide a general framework that can scale to high volume/traffic in the future.
 
-* Docker - to distribute the engine/app easily  to mulitple instance 
-* Kubernetes - make deploy easy and quickly scale out
-* CI/CD pipeline - automated build
-* AWS, GCP, Heroku, etc - depends on what/how we want to make an app and run, we are going to use one or two IaaS/PaaS services.
-* HDFS( or compatible ) - to store big data and share it between systems
-* Apache Spark (and MLlib ) - planning to use Scikit-learn for machine learning part, but in case it's not enough to handle 
-huge volume and traffic, then we will consider to use Apache Spark + MLlib to imiplement the engine
-* REST APIs - Depends on how we want to provide a functionality of the filteirng engine to other applicaiton, we might need to
-provide HTTP Rest APIs or something similar RPC API.
-
-
+* Docker - to easily deploy, to multiple instances, the engine and application with all of their dependencies 
+* Kubernetes - to make deployment easy and allow for fast scale out
+* CI/CD pipeline - to automate the build, integration, and deployment
+* AWS, GCP, Heroku, etc - to deploy the solution into a mainstream PaaS infrastructure 
+* HDFS or similar - to store big data and share it between systems
+* Scikit-learn or Apache Spark + MLlib - to train and deploy the classifier for toxic chat detection including scaling out the processing if sklearn is not sufficient for the volume of traffic expected
+* RESTful APIs - to (possibly) provide access to the filteirng engine for use by other applications
