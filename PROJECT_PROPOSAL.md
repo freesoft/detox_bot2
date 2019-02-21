@@ -50,4 +50,4 @@ The team will integrate the following technologies and solutions to provide a ge
 * AWS, GCP, Heroku, etc - to deploy the solution into a mainstream PaaS infrastructure 
 * HDFS or similar - to store big data and share it between systems
 * Scikit-learn or Apache Spark + MLlib - to train and deploy the classifier for toxic chat detection including scaling out the processing if sklearn is not sufficient for the volume of traffic expected
-* RESTful APIs - to (possibly) provide access to the filteirng engine for use by other applications
+* RESTful APIs - to (possibly) provide access to the filtering engine for use by other applications
