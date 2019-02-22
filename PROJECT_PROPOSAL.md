@@ -1,13 +1,11 @@
-# Project proposal - Detox Bot
-## CS498 Cloud Computing Application, Spring 2019
+## Team 15, Project proposal - Detox Bot
+### CS498 Cloud Computing Application, Spring 2019
 
 ```
-Wonhee Jung (wonheej2@illinois.edu)
-Kevin Mackie (kevindm2@illinois.edu)
-Cindy Tseng (cindyst2@illinois.edu)
-Conrad Harley (harley3@illinois.edu)
+Wonhee Jung (wonheej2@illinois.edu), Kevin Mackie (kevindm2@illinois.edu), 
+Cindy Tseng (cindyst2@illinois.edu), Conrad Harley (harley3@illinois.edu)
 ```
-# Overview
+## Overview
 
 Online platforms allow people to express their opinions freely, and stimulate collaboration across the globe. 
 Unfortunately, online interaction may often come with loosened inhibitions in making profane, bigoted, or offensive 
@@ -29,25 +27,24 @@ size while maintaining a shared file space (HDFS) between each Kubernetes Zone.
 The framework will be documented in a final report that presents the architecture, development, and use of this system
 in the context of a web chat application and Twitch chatBot as motivating examples.
 
-# What we are going to make 
+## What we are going to make 
 
 We will create a prototype of PaaS/SaaS service that provides the following specific capabilities:
 
 * machine-learning-based toxic chat identification and filtering engine
 * integerated web chat application or chatbot that uses the engine to analyze a real-time stream of text
 
-# Dataset
+## Dataset
 
 The only publicly available toxic comment dataset we have been able to find so far is Kaggle's toxic comment classification challenge dataset, which we will use to train our classifier. https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge
 
-# Cloud system integration and development
+## Cloud system integration and development
 
 The team will integrate the following technologies and solutions to provide a general framework that can scale to high volume/traffic in the future.
 
-* Docker - to easily deploy, to multiple instances, the engine and application with all of their dependencies 
-* Kubernetes - to make deployment easy and allow for fast scale out
+* Docker, Kubernetes - easy deploy and scale out
 * CI/CD pipeline - to automate the build, integration, and deployment
 * AWS, GCP, Heroku, etc - to deploy the solution into a mainstream PaaS infrastructure 
 * HDFS or similar - to store big data and share it between systems
-* Scikit-learn or Apache Spark + MLlib - to train and deploy the classifier for toxic chat detection including scaling out the processing if sklearn is not sufficient for the volume of traffic expected
-* RESTful APIs - to (possibly) provide access to the filtering engine for use by other applications
+* Scikit-learn or Apache Spark + MLlib - machine learing for the detox engine
+* RESTful APIs - to help other applications integrate detox engine in the system
