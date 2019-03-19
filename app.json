@@ -1,0 +1,16 @@
+{
+    "name": "Detox toxic chat classifier",
+    "description": "Detox toxic chat message classifier testing webapp",
+    "keywords": ["toxicity", "toxic", "salty", "classifier", "nlp", "naivebayes", "cs410", "uiuc"],
+    "scripts": {
+    },
+    "env": {
+    },
+    "formation": {
+    },
+    "buildpacks": [
+      {
+        "url": "heroku/python"
+      }
+    ]
+  }

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+
+  <title>Chat session to test DeTox engine</title>
+</head>
+
+<body>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+
+  <h3 style='color: #ccc;font-size: 30px;'>No message yet..</h3>
+  <div class="message_holder"></div>
+
+  <form method="POST">
+    <input type="text" class="username" placeholder="User Name" />
+    <input type="text" class="message" placeholder="Messages" />
+    <input type="submit" />
+  </form>
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+  <script type="text/javascript">
+    var socket = io.connect(location.protocol + '//' + location.hostname + (location.port ? ':' + location.port: ''));
+
+    socket.on('connect', function () {
+      socket.emit('my event', {
+        username : '',
+        message: 'User Connected',
+        is_toxic: ''
+      })
+      var form = $('form').on('submit', function (e) {
+        e.preventDefault()
+        let user_name = $('input.username').val()
+        let user_input = $('input.message').val()
+        socket.emit('my event', {
+          username: user_name,
+          message: user_input,
+          is_toxic : ''
+        })
+        $('input.message').val('').focus()
+      })
+    })
+    socket.on('my response', function (msg) {
+      console.log('on javascript ==> username:' + msg.username + ', message:' + msg.message + ', is_toxic:' + msg.is_toxic)
+      if (typeof msg.username !== 'undefined' && msg.username != '') {
+        $('h3').remove()
+        if (msg.is_toxic == '1')
+          $('div.message_holder').append('<div><b style="color: #ff0000">' + msg.username + '</b> ' + 'toxic message >> ' + msg.message + '</div>')
+        else 
+          $('div.message_holder').append('<div><b style="color: #000">' + msg.username + '</b> ' + msg.message + '</div>')
+      }
+    })
+  </script>
+
+</body>
+
+</html>
