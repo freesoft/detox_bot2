@@ -29,6 +29,9 @@ def load_module():
 def sessions():
     return render_template('session.html')
 
+@app.route('/chat', methods=['GET', 'POST'] )
+def mainview():
+    return render_template('chat.html')
 
 def messageReceived(methods=['GET', 'POST']):
     print('message was received!!!')
