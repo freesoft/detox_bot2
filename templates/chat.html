@@ -27,8 +27,6 @@
     $("input.username").keyup(function(event) {
       if (event.keyCode === 13) {
         $("input.username").blur();
-        $('div.chatbox').append('<div><b style="color: #ff0000">' + username + '</b> ' + 'toxic message >> ' + "Message" + '</div>')
-        window.scrollTo(0,document.querySelector("#chatbox").scrollHeight);
       }
     });
   });
@@ -45,6 +43,8 @@
       $('div.chatbox').append('<div><b style="color: #ff0000">' + msg.username + '</b> ' + 'toxic message >> ' + msg.message + '</div>')
     else
       $('div.chatbox').append('<div><b style="color: #000">' + msg.username + '</b> ' + msg.message + '</div>')
+
+    window.scrollTo(0,document.querySelector("div.chatbox").scrollHeight);
 
   }
   function sendMessage(msg) {
@@ -124,17 +124,7 @@
         <h1 class="h2">Twitch Bot</h1>
       </div>
       <div class="chatbox">
-        <div><b style="color: #ff0000">Kevin</b>
-          toxic message >>  test
-        </div>
-        <div><b style="color: #000">Wonhee</b>
-          Normal message
-        </div>
-
       </div>
-
-      <!--      <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>-->
-
     </main>
   </div>
 </div>
