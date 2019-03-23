@@ -119,25 +119,23 @@
       </div>
     </nav>
 
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+    <main role="main" class="main-content col-md-9 ml-sm-auto col-lg-10 px-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Twitch Bot</h1>
       </div>
       <div class="chatbox">
       </div>
     </main>
+    <nav class="navbar navbar-dark fixed-bottom bg-dark flex-md-nowrap p-0 shadow">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#"></a>
+      <input class="message form-control form-control-dark w-100" type="text" placeholder="Message" aria-label="Message"
+             onchange="sendMessage(this.value);">
+      <ul class="navbar-nav px-3">
+      </ul>
+    </nav>
   </div>
 </div>
-<nav class="navbar navbar-dark fixed-bottom bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#"></a>
-  <input class="message form-control form-control-dark w-100" type="text" placeholder="Message" aria-label="Message"
-         onchange="sendMessage(this.value);">
-  <ul class="navbar-nav px-3">
-    <!--    <li class="nav-item text-nowrap">-->
-    <!--      <a class="nav-link" href="#">Sign out</a>-->
-    <!--    </li>-->
-  </ul>
-</nav>
+
 
 <script>
   feather.replace()
