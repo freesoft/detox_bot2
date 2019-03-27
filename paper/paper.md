@@ -148,7 +148,7 @@ As mentioned above, we are considering to replace ML/NLP library from sckilt-lea
 ## better modeling result share
 
 Training the model is expensive, and we definitely don't want to train the classifier everytime Docker container runs. Right now, the app saves the trained model in file ( Pickled in Python term ) and restore the model from the file when it needs to classify the comment. However, we are expecting to have multiple docker container running on K8s clusters and need to find a better way to share the created model with other k8s pods.
-There are a few options we'd liek to try, including k8s volume pods and docker volume mounting on HDFS path, etc. 
+There are a few options we'd like to try, including k8s volume pods and docker volume mounting on HDFS path, etc. 
 
 ## Infrastructure as Code
 
