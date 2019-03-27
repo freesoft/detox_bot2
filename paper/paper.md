@@ -96,7 +96,37 @@ Method/Design
 Preliminary Evaluation/Results
 ===============================
 
-## Sub-section
+## Toxic chat classification accuracy
+
+We used TF-IDF + Multinomial Naive Bayes for toxic chat classification. For the Machine Learning library and NLP, we used scikit-learn up until now because the library was easy to use and also because we were able to find many examples online. However, we've realized that scikit-learn uses too much memory space when training data gets bigger. That's why we are considering Apache Spark's MLlib as an alternative to scikit-learn in order to run it in cloud service for better scalability and high volume capacity. 
+
+With pyspark's dataframe based ml library the performance metrics are: 
+accuracy: 0.871943231441048
+precision: 0.4434561626429479
+recall: 0.7015075376884422
+F1: 0.5434021019852082
+
+Work is still in progress to improve the scores so the F1 score is on-par, if not better, than the F1 score for scikit-learn implementation (It was 0.64)
+
+Precision/Recall/F1-Score : With scikit-learn, we've shuffled the training set and took 20% as the test set for evaluation. Note the performance numbers varies slightly with each run due to the random shuffling of data.  
+
+|     | precision | recall | f1-score | support |
+-----|-----------|--------|----------|----------
+   0 |  0.94     | 1.00   |  0.97    | 28629   
+   1 |  0.95     | 0.48   |  0.64    | 3286    
+avg/total|  0.94     | 0.94   |  0.94    | 31915 
+
+In the result, for the non-toxic comment( labeled as 0 ) has 0.97 f1-score, and 0.64 f1-score for the toxic comment. In average, F1 is 0.94 for the both case. The result is not bad, at least for non-toxic comment classficiation, because the classifier rarely classfied non-toxic chat as toxic(0.03). Hope we can improve F1 score for the toxic comment class in the final report. 
+
+## Cloud Services
+ 
+We've evaluated a few IaaS,PaaS cloud services, inclduing AWS, GCP, Heroku, to name a few, and decided to use GCP because of its easy configuration for Kubernetes Cluster. Kubernetes Cluster is something the team decided to use for docker container scale-out and deploy.
+K8s gets direct support from Google, and GCP has services GKE already. 
+Also, we were able to create a docker build pipeline using GCP's Cloud Build with a few mouse click. 
+
+AWS was a bit tricky for our usage and its Kubernetes support doesn't seem to surpass that of GCP's. 
+
+Heroku was also one of the consideration, but Heroku doesn't support any Kunbernestes services or even deploy the servie with Docker using any CI/CD build pipeline. Users can deploy the dockerized app, but it should be done locally in user's console using Heroku CLI.
 
 Discussion
 ==========
@@ -111,7 +141,19 @@ Related Work (optional for this milestone)
 Future Work
 ===========
 
-## Sub-section
+## classifier upgrade
+
+As mentioned above, we are considering to replace ML/NLP library from sckilt-learn to Apache Spark + Mllib. The team already created a running demo that can classify comments slightly worse F1 score. The team is still working on tuning the model and testing it out on GCP before pushing the changes to github. 
+
+## better modeling result share
+
+Training the model is expensive, and we definitely don't want to train the classifier everytime Docker container runs. Right now, the app saves the trained model in file ( Pickled in Python term ) and restore the model from the file when it needs to classify the comment. However, we are expecting to have multiple docker container running on K8s clusters and need to find a better way to share the created model with other k8s pods.
+There are a few options we'd like to try, including k8s volume pods and docker volume mounting on HDFS path, etc. 
+
+## Infrastructure as Code
+
+GCP is easy to use, but it still requires lots of manual work when we had to shutdown all the k8s clusters, loadbalancers, etc and later recreate all of them again to avoid GCP's daily charging (around $1.5 USD for three k8s pods, loadbalancer, and API call volumne ).
+We considered a few solutions that support Infrastructure as Code, e.g, Puppet, Chef, Ansible, etc and probably use Terraform to automate our infrastrcture build and maintain it as code. 
 
 Division of Work (May overlap)
 ==============================
