@@ -152,7 +152,7 @@ There are a few options we'd like to try, including k8s volume pods and docker v
 
 ## Infrastructure as Code
 
-GCP is easy to use, but it still requires lots of manual work when team had a situation that we had to shutdown all the k8s clusters, loadbalancers, etc and later recreate all of them again to avoid GCP's daily charging (around $1.5 USD for three k8s pods, loadbalancer, and API call volumne ).
+GCP is easy to use, but it still requires lots of manual work when we had to shutdown all the k8s clusters, loadbalancers, etc and later recreate all of them again to avoid GCP's daily charging (around $1.5 USD for three k8s pods, loadbalancer, and API call volumne ).
 We considered a few solutions that support Infrastructure as Code, e.g, Puppet, Chef, Ansible, etc and probably use Terraform to automate our infrastrcture build and maintain it as code. 
 
 Division of Work (May overlap)
