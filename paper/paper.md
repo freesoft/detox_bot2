@@ -120,7 +120,7 @@ In the result, for the non-toxic comment( labeled as 0 ) has 0.97 f1-score, and 
 
 ## Cloud Services
  
-We've evaluated a few IaaS,PaaS cloud services, inclduing AWS, GCP, Heroku, and name a few, and decided to use GCP because of its easy configuration for Kubernetes Cluster that's something the team decided to use for docker container scale-out and deploy.
+We've evaluated a few IaaS,PaaS cloud services, inclduing AWS, GCP, Heroku, to name a few, and decided to use GCP because of its easy configuration for Kubernetes Cluster. Kubernetes Cluster is something the team decided to use for docker container scale-out and deploy.
 K8s gets direct support from Google, and GCP has services GKE already. 
 Also, we were able to create a docker build pipeline using GCP's Cloud Build with a few mouse click. 
 
