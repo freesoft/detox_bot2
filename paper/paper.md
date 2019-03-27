@@ -126,7 +126,7 @@ Also, we were able to create a docker build pipeline using GCP's Cloud Build wit
 
 AWS was a bit tricky for our usage and its Kubernetes support doesn't seem to surpass that of GCP's. 
 
-Heroku was also one of the consideration, but Heroku doesn't support any Kunbernestes services or deven deploy the servie with Docker using any CI/CD build pipeline. Users can deploy the dockerized app, but it should be done locally in user's console using Heroku CLI.
+Heroku was also one of the consideration, but Heroku doesn't support any Kunbernestes services or even deploy the servie with Docker using any CI/CD build pipeline. Users can deploy the dockerized app, but it should be done locally in user's console using Heroku CLI.
 
 Discussion
 ==========
