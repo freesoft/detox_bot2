@@ -143,7 +143,7 @@ Future Work
 
 ## classifier upgrade
 
-As mentioned above, we are considering to replace ML/NLP library from sckilt-learn to Apache Spark + Mllib. The team already created a running demo that can classify the comment and has equivalent F1 score, but didn't have enough time to replace the model before the progress report.
+As mentioned above, we are considering to replace ML/NLP library from sckilt-learn to Apache Spark + Mllib. The team already created a running demo that can classify comments slightly worse F1 score. The team is still working on tuning the model and testing it out on GCP before pushing the changes to github. 
 
 ## better modeling result share
 
