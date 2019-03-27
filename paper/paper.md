@@ -124,7 +124,7 @@ We've evaluated a few IaaS,PaaS cloud services, inclduing AWS, GCP, Heroku, to n
 K8s gets direct support from Google, and GCP has services GKE already. 
 Also, we were able to create a docker build pipeline using GCP's Cloud Build with a few mouse click. 
 
-AWS was a bit tricky for our usage and also Kubernetes support doesn't seem to surpass the GCP. 
+AWS was a bit tricky for our usage and its Kubernetes support doesn't seem to surpass that of GCP's. 
 
 Heroku was also one of the consideration, but Heroku doesn't support any Kunbernestes services or deven deploy the servie with Docker using any CI/CD build pipeline. Users can deploy the dockerized app, but it should be done locally in user's console using Heroku CLI.
 
