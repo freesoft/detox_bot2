@@ -98,7 +98,15 @@ Preliminary Evaluation/Results
 
 ## Toxic chat classification accuracy
 
-We used TF-IDF + Multinomial Naive Bayes for toxic chat classification. For the Machine Learning lbirary and NLP, we used scikit-learn up until now because the library was easy to use and also able to find many example codes. However, we've realized that scikit-learn uses too much memory space when training data is getting bigger. That's why we are considering Apache Spark and MLlib as scikit-learn's alternatives to run it in cloud service and expecting to have better scability and high volumne capacity. We don't have performance/resource comparision data between scikit-learn and Apache Spark Mllib at ths point and that's something we might need to evaluate. 
+We used TF-IDF + Multinomial Naive Bayes for toxic chat classification. For the Machine Learning library and NLP, we used scikit-learn up until now because the library was easy to use and also because we were able to find many examples online. However, we've realized that scikit-learn uses too much memory space when training data gets bigger. That's why we are considering Apache Spark's MLlib as an alternative to scikit-learn in order to run it in cloud service for better scalability and high volume capacity. 
+
+With pyspark's dataframe based ml library the performance metrics are: 
+accuracy: 0.871943231441048
+precision: 0.4434561626429479
+recall: 0.7015075376884422
+F1: 0.5434021019852082
+
+Work is still in progress to improve the scores so the F1 score is on-par, if not better, than the F1 score for scikit-learn implementation (It was 0.64)
 
 Precision/Recall/F1-Score : With scikit-learn, we've shuffled the training set and took 20% of it as comparsion using scikit-learn's classification_report to get F1 Score, and here is the result. The data can vary slightly every time classification_report function is being executed and also depends on what kind of dataset is used for training.
 
