@@ -108,7 +108,7 @@ F1: 0.5434021019852082
 
 Work is still in progress to improve the scores so the F1 score is on-par, if not better, than the F1 score for scikit-learn implementation (It was 0.64)
 
-Precision/Recall/F1-Score : With scikit-learn, we've shuffled the training set and took 20% of it as comparsion using scikit-learn's classification_report to get F1 Score, and here is the result. The data can vary slightly every time classification_report function is being executed and also depends on what kind of dataset is used for training.
+Precision/Recall/F1-Score : With scikit-learn, we've shuffled the training set and took 20% as the test set for evaluation. Note the performance numbers varies slightly with each run due to the random shuffling of data.  
 
 |     | precision | recall | f1-score | support |
 -----|-----------|--------|----------|----------
