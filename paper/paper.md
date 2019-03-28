@@ -32,14 +32,9 @@ Introduction
 ============
 
 \IEEEPARstart{O}{nline} <!-- TODO: Automate IEEEPARstart -->
-platforms allow people to express their opinions freely, and stimulate collaboration across the globe. Unfortunately, online interaction may often come with loosened inhibitions in making profane, bigoted, or offensive remarks. We refer to such unwelcome remarks as "toxic chat". Online systems may or may not have their own embedded profanity filtering, and those that do typically use pre-registered terms and simple pattern matching. This approach lacks the deeper contextual understanding needed to identify sentences that are toxic but that may not contain banned terms. Thus we propose a new toxic chat filtering system that differentiates itself in that a) its filtering is based on machine learning and deeper contextual analysis, and b) it is deployed as a scalable and easily integrated web framework that can be adapted to any source of text for online interaction of any size. The platform is based on Docker and Kubernetes for easy deployment and dependency management and to allow for fast scale-out to large systems. It uses state-of-the-art distributed systems technology for processing and storage, to allow for rapid scaling to any size while maintaining a shared file space (HDFS) between each Kubernetes Zone. This paper presents the architecture, development, and use of this system in the context of a web chat application and Twitch chatBot as motivating examples.
+platforms allow people to express their opinions freely, and stimulate collaboration across the globe. Unfortunately, online interaction may often come with loosened inhibitions in making profane, bigoted, or offensive remarks. We refer to such unwelcome remarks as "toxic chat". Online systems may or may not have their own embedded profanity filtering, and those that do typically use pre-registered terms and simple pattern matching. This approach lacks the deeper contextual understanding needed to identify sentences that are toxic but that may not contain banned terms. 
 
-## What we are going to make 
-
-We will create a prototype of PaaS/SaaS service that provides the following specific capabilities:
-
-* machine-learning-based toxic chat identification and filtering engine
-* integerated web chat application or chatbot that uses the engine to analyze a real-time stream of text
+Thus we propose a new toxic chat filtering system that differentiates itself in that a) its filtering is based on machine learning and deeper contextual analysis, and b) it is deployed as a scalable and easily integrated web framework that can be adapted to any source of text for online interaction of any size. The platform is based on Docker and Kubernetes for easy deployment and dependency management and to allow for fast scale-out to large systems. It uses state-of-the-art distributed systems technology for processing and storage, to allow for rapid scaling to any size while maintaining a shared file space (HDFS) between each Kubernetes Zone. This paper presents the architecture, development, and use of this system in the context of a web chat application and Twitch chatBot as motivating examples.
 
 Datasets
 ========
@@ -49,121 +44,152 @@ There is a dearth of labelled datasets for training classifiers to detect toxic 
 Technologies and Tools
 =======================
 
-The following technologies and solutions were integrated to provide a general framework that can scale to high volume/traffic in the future.
+The following technologies and solutions have been integrated to date. 
 
-* Flask, websockets, javascript, bootstrap - web application framework and client-server sockets 
-* Docker, Kubernetes - easy deploy and scale out
-* CI/CD pipeline - to automate the build, integration, and deployment
-* AWS, GCP, Heroku, etc - to deploy the solution into a mainstream PaaS infrastructure 
-* HDFS or similar - to store big data and share it between systems
-* Scikit-learn or Apache Spark + MLlib - machine learing for the detox engine
-* RESTful APIs - to help other applications integrate detox engine in the system
-
-## Web application
-
-The user interface is implemented as a web application reachable via public URL. Python flask was chosen for the web application development framework, due to its simplicity, modularity, and compatibility with deployment to Google Cloud Platform. Client-side programming is done in Javascript with Bootstrap for the GUI framework and websockets for client-server socket connectivity for real-time chat.
-
-In the initial prototype, the web application connects the user to both a webchat and to the "Twitch Bot" that monitors a specific Twitch TV chat channel. Text typed into the web chat or received from Twitch is passed to the classifier. Toxic messages are marked in red with a prefix indicating that the message is toxic. 
-
-In future versions of the application a load balancer can be used to distribute traffic among several instances. Also, a complete application will allow plugs ins for different chat sources (Twitter, web forums, Reddit, Wikipedia), with the user able to specify the chat source and channel (currently this is hard-coded).
-
-![Detoxifier Web Application](figures/gui.png)
-
-## Deployment and scaling
-* Docker, Kubernetes - easy deploy and scale out
-
-## Automated build, integration, deployment
-* CI/CD pipeline - to automate the build, integration, and deployment
-
-## IaaS/PaaS infrastructure
-* AWS, GCP, Heroku, etc - to deploy the solution into a mainstream PaaS infrastructure 
-
-## Shared storage
-* HDFS or similar - to store big data and share it between systems
-
-## Machine Learning Framework
-* Scikit-learn or Apache Spark + MLlib - machine learing for the detox engine
-
-## Application Programming Interfaces
-* RESTful APIs - to help other applications integrate detox engine in the system
-
+* Flask, WebSockets, JavaScript, Bootstrap - web application framework and client-server sockets 
+* Docker, Kubernetes - easy deployment and scale out
+* Google Cloud Platform (GCP) - to deploy the solution into a mainstream IaaS/PaaS infrastructure 
+* scikit-learn - machine learning for the detox engine
+* Github - source code management
+  
+See "Future Work" for other technologies to be assessed for integration over the coming weeks.
 
 Method/Design
 =============
 
-## Sub-section
+The framework is divided into the following elements:
+
+* Web server
+* Chat stream
+* Classifier
+  * Training data set
+  * Model storage
+  * Classifier
+* Container system
+
+## Web server
+
+The user interface is implemented as a web application reachable via public URL. Python flask was chosen for the web application development framework, due to its simplicity, modularity, and compatibility with deployment to Google Cloud Platform. Client-side programming is done in JavaScript with Bootstrap for the GUI framework and WebSockets for client-server socket connectivity for real-time chat.
+
+![Detoxifier Web Application](figures/gui.png)
+
+## Chat stream 
+
+The web application connects the user to both a webchat and Twitch TV stream. For webchat, the server acts as a hub to relay messages arriving from each client to all other connected clients. The web server attaches to a hard-coded Twitch TV channel and receives and processes a continuous stream of comments. Text typed into the web chat or received from Twitch is passed to the classifier. Toxic messages are marked in red with a prefix indicating that the message is toxic.
+
+## Classifier
+
+We use a Multinomial Naive Bayes classifier with TF-IDF for toxic chat classification. The classifier is trained on the Jigsaw dataset on Kaggle and the resulting model is persisted in serialized form and used for future invocations of the framework. The scikit-learn library was chosen for prototyping the Machine Learning and NLP components because it was easy to use and is supported with many online examples. 
 
 Preliminary Evaluation/Results
 ===============================
 
 ## Toxic chat classification accuracy
 
-We used TF-IDF + Multinomial Naive Bayes for toxic chat classification. For the Machine Learning library and NLP, we used scikit-learn up until now because the library was easy to use and also because we were able to find many examples online. However, we've realized that scikit-learn uses too much memory space when training data gets bigger. That's why we are considering Apache Spark's MLlib as an alternative to scikit-learn in order to run it in cloud service for better scalability and high volume capacity. 
+We used TF-IDF with Multinomial Naive Bayes for toxic chat classification. scikit-learn uses a lot of memory as training data gets bigger, and we are assessing Apache Spark's MLlib as an alternative to run as a cloud service for better scalability and high volume capacity. 
 
-With pyspark's dataframe based ml library the performance metrics are: 
-accuracy: 0.871943231441048
-precision: 0.4434561626429479
-recall: 0.7015075376884422
-F1: 0.5434021019852082
+With PySpark's dataframe-based ML library, the performance metrics are: 
+\begin{center}
+\begin{tabular}{ |c|c| } 
+ \hline
+ Accuracy & 0.871943231441048 \\
+ Precision & 0.4434561626429479 \\
+ Recall & 0.7015075376884422\\
+ F1 & 0.5434021019852082 \\
+ \hline
+\end{tabular}
+\end{center}
 
-Work is still in progress to improve the scores so the F1 score is on-par, if not better, than the F1 score for scikit-learn implementation (It was 0.64)
+Work is still in progress to improve the scores so the F1 score is on-par, if not better than, the F1 score for scikit-learn implementation (which was 0.64).
 
-Precision/Recall/F1-Score : With scikit-learn, we've shuffled the training set and took 20% as the test set for evaluation. Note the performance numbers varies slightly with each run due to the random shuffling of data.  
+Precision/Recall/F1-Score : With scikit-learn, we shuffled the training set and took 20% as the test set for evaluation. Note the performance numbers vary slightly with each run due to the random shuffling of data.  
 
-|     | precision | recall | f1-score | support |
------|-----------|--------|----------|----------
-   0 |  0.94     | 1.00   |  0.97    | 28629   
-   1 |  0.95     | 0.48   |  0.64    | 3286    
-avg/total|  0.94     | 0.94   |  0.94    | 31915 
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c| } 
+ \hline
+  & Precision & Recall & F1-Score & Support \\
+  \hline 
+ 0 & 0.94 & 1.00 & 0.97 & 28629 \\ 
+ 1 & 0.95 & 0.48 & 0.64 & 3286 \\
+ Avg/Total & 0.95 & 0.94 & 0.94 & 31915 \\ 
+ \hline
+\end{tabular}
+\end{center}
 
-In the result, for the non-toxic comment( labeled as 0 ) has 0.97 f1-score, and 0.64 f1-score for the toxic comment. In average, F1 is 0.94 for the both case. The result is not bad, at least for non-toxic comment classficiation, because the classifier rarely classfied non-toxic chat as toxic(0.03). Hope we can improve F1 score for the toxic comment class in the final report. 
+In the result, the non-toxic comments (labeled as 0) have a 0.97 F1-score and the toxic comments have a 0.64 F1-score. On average, F1 is 0.94 for the both cases. The result is acceptable, at least for non-toxic comment classficiation, because the classifier rarely classfied non-toxic chat as toxic (0.03 error rate). We hope to improve the F1 score for the toxic comments class in the final report. 
 
 ## Cloud Services
  
-We've evaluated a few IaaS,PaaS cloud services, inclduing AWS, GCP, Heroku, to name a few, and decided to use GCP because of its easy configuration for Kubernetes Cluster. Kubernetes Cluster is something the team decided to use for docker container scale-out and deploy.
-K8s gets direct support from Google, and GCP has services GKE already. 
-Also, we were able to create a docker build pipeline using GCP's Cloud Build with a few mouse click. 
+We have evaluated several IaaS and PaaS cloud services, inclduing AWS, GCP, and Heroku. We have decided to use GCP because of its easy configuration of Kubernetes Clusters, which the team decided to use for docker container scale-out and deployment. K8s gets direct support from Google, and GCP already has GKE services. We were able to create a docker build pipeline using GCP's Cloud Build with a few mouse clicks. 
 
-AWS was a bit tricky for our usage and its Kubernetes support doesn't seem to surpass that of GCP's. 
-
-Heroku was also one of the consideration, but Heroku doesn't support any Kunbernestes services or even deploy the servie with Docker using any CI/CD build pipeline. Users can deploy the dockerized app, but it should be done locally in user's console using Heroku CLI.
+AWS was problematic for our usage, and its Kubernetes support was not as mature or functional as GCP's. Heroku was also considered, but it does not support any Kubernetes services or Docker deployments using CI/CD build pipelines. Users can deploy the dockerized application, but it has to be done locally from the user's console using the Heroku CLI.
 
 Discussion
 ==========
 
-## Sub-section
+Our final objective is to develop a flexible and scalable distributed architecture for toxic chat classification. At this intermediate stage, we have most of the technical components prototyped at varying levels of completeness. There is a web application that allows users to exchange chat messages and monitor a fixed online chat source. A Multinomial Naive Bayes classifier is invoked by the web framework to classify the web chat messages as either toxic or non-toxic. The application is built as a docker image and deployed onto a Kubernetes pod on Google Cloud Platform. 
 
-Related Work (optional for this milestone)
-==========================================
-
-## Sub-section
+See the next section "Future Work" for details about the work to be undertaken in the coming weeks to develop the final system.
 
 Future Work
 ===========
 
-## classifier upgrade
+## Classifier upgrade
 
-As mentioned above, we are considering to replace ML/NLP library from sckilt-learn to Apache Spark + Mllib. The team already created a running demo that can classify comments slightly worse F1 score. The team is still working on tuning the model and testing it out on GCP before pushing the changes to github. 
+As mentioned above, we are assessing the possibility of replacing the ML and NLP library from scikit-learn with Apache Spark and MLlib. We have already created a running demo that can classify comments at a slightly lower F1 score. We continue tuning and testing the model, and verifying it on Google Cloud Platform prior to committing changes to the repository. 
 
-## better modeling result share
+## Better sharing of trained model for classifier
 
-Training the model is expensive, and we definitely don't want to train the classifier everytime Docker container runs. Right now, the app saves the trained model in file ( Pickled in Python term ) and restore the model from the file when it needs to classify the comment. However, we are expecting to have multiple docker container running on K8s clusters and need to find a better way to share the created model with other k8s pods.
-There are a few options we'd like to try, including k8s volume pods and docker volume mounting on HDFS path, etc. 
+Training the model is expensive, so we do not want to train the classifier everytime the Docker container runs. The application currently saves the trained model to a file (in a serialized format called "pickle" in Python), and then restores the model from the file (if it exists) when it starts up and needs to classify a comment. However, we are expecting to have multiple docker containers running on K8s clusters, so a better way is needed to share the trained model with other K8s pods. We will expore options for this, such as K8s volume pods and Docker volume mounting on HDFS paths, etc. 
 
 ## Infrastructure as Code
 
-GCP is easy to use, but it still requires lots of manual work when we had to shutdown all the k8s clusters, loadbalancers, etc and later recreate all of them again to avoid GCP's daily charging (around $1.5 USD for three k8s pods, loadbalancer, and API call volumne ).
-We considered a few solutions that support Infrastructure as Code, e.g, Puppet, Chef, Ansible, etc and probably use Terraform to automate our infrastrcture build and maintain it as code. 
+GCP is easy to use, but it requires a lot of manual effort when shutting down and later recreating all of the K8s clusters, load balancers, etc. This is frequently done during development to avoid GCP's daily charges. We will consider solutions that support Infrastructure as Code, such as Puppet, Chef, Ansible, etc. Also, we will possibly use Terraform to automate our infrastrcture build and maintain it as code. 
+
+## Continuous Integration and Continuous Deployment (CI/CD) pipeline
+
+As the solution matures we will automate the build, integration, and deployment pipeline to allow for more rapid development and validation of changes and then deployment to a working system.
+
+## RESTful APIs 
+
+We may consider RESTful interfaces to allow easier integration of the facilities provided by our framework (detox engine, chat stream acquisition, etc.) with other applications.
+
+## Load-balanced web application
+
+We will investigate using a load balancer to distribute traffic among several instances of the web application. Also, a complete application will allow plugs ins for different chat sources (Twitter, web forums, Reddit, Wikipedia), with the user able to specify the chat source and channel (currently this is hard-coded). We may also consider user authentication and configuration settings for the web application.
 
 Division of Work (May overlap)
 ==============================
 
-## Sub-section
+This section summarizes the areas of responsibility of the respective members of the team.
 
-Cloud system integration and development
-========================================
+## Wonhee Jung
 
+* Docker design and build
+* Google Cloud Platform and Kubernetes deployment
+* Repository management
+* Code reviews
+* Paper writing
+  
+## Kevin Mackie
 
+* Unified web application prototype for web chat and Twitch TV bot
+* Literature review of classification datasets
+* Framework for paper generation
+* Code reviews
+* Paper writing
+
+## Cindy Tseng
+
+* Multinomial Naive Bayes classifier on Spark and MLlib 
+* scikit-learn and MLlib classifier performance comparison
+* Code reviews
+* Paper writing
+
+## Conrad Harley
+
+* Kubernetes and classifier model storage research
+  
 Acknowledgment {#acknowledgment .unnumbered}
 ==============
 
