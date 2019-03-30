@@ -129,6 +129,8 @@ Discussion
 
 Our final objective is to develop a flexible and scalable distributed architecture for toxic chat classification. At this intermediate stage, we have most of the technical components prototyped at varying levels of completeness. There is a web application that allows users to exchange chat messages and monitor a fixed online chat source. A Multinomial Naive Bayes classifier is invoked by the web framework to classify the web chat messages as either toxic or non-toxic. The application is built as a docker image and deployed onto a Kubernetes pod on Google Cloud Platform. 
 
+It has been challenging to move our classifier from scikit-learn to the PySpark DataFrame-based ML libraries. First, most of the PySpark ML libraries are still RDD-based, rather than DataFrame-based. Second, most of the Spark enviornment is tested in the Linux environment, and there are a lot of special setups needed to make it work on Windows. Also, we've seen that the F1 score using the PySpark DataFrame ML library is lower than the F1 score using scikit-learn library. In the upcoming weeks we will work on improving the PySpark F1 score.
+
 See the next section "Future Work" for details about the work to be undertaken in the coming weeks to develop the final system.
 
 Future Work
