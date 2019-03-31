@@ -122,7 +122,7 @@ Precision/Recall/F1-Score : With scikit-learn, we shuffled the training set and 
 \end{tabular}
 \end{center}
 
-In the result, the non-toxic comments (labeled as 0) have a 0.97 F1-score and the toxic comments have a 0.64 F1-score. On average, F1 is 0.94 for the both cases. The result is acceptable, at least for non-toxic comment classficiation, because the classifier rarely classfied non-toxic chat as toxic (0.03 error rate). We hope to improve the F1 score for the toxic comments class in the final report. 
+In the result, the non-toxic comments (labeled as 0) have a 0.97 F1-score and the toxic comments have a 0.64 F1-score. On average, F1 is 0.94 for both cases. The result is acceptable, at least for non-toxic comment classficiation, because the classifier rarely classfied non-toxic chat as toxic (0.03 error rate). We hope to improve the F1 score for the toxic comments class in the final report. 
 
 ## Cloud Services
  
