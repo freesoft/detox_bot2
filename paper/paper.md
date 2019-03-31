@@ -156,7 +156,7 @@ GCP is easy to use, but it requires a lot of manual effort when shutting down an
 
 ## Continuous Integration and Continuous Deployment (CI/CD) pipeline
 
-As the solution matures, we are considering to automate the build, integration, and deployment pipeline to allow for more rapid development and validation of changes and then deployment to a working system. The project already uses GCP's Cloud Build feature that triggers the project's build whenever change is submitted to the Github repo's develop branch, but the team is researching if there is better alternatives/visualizing the build pipeline through other tools like Jenkins 2 or other commericial CI/CD solutions.
+As the solution matures, we are considering to automate the build, integration, and deployment pipeline to allow for more rapid development and validation of changes and then deployment to a working system. The project already uses GCP's Cloud Build feature, that triggers the project's build whenever a change is submitted to the Github repo's develop branch. However, the team is researching if there are better alternatives for the build pipeline through other tools like Jenkins 2 or other commericial CI/CD solutions.
 
 ## RESTful APIs 
 
