@@ -152,11 +152,11 @@ Training the model is expensive, so we do not want to train the classifier every
 
 ## Infrastructure as Code
 
-GCP is easy to use, but it requires a lot of manual effort when shutting down and later recreating all of the K8s clusters, load balancers, etc. This is frequently done during development to avoid GCP's daily charges. We will consider solutions that support Infrastructure as Code, such as Puppet, Chef, Ansible, etc. Also, we will possibly use Terraform to automate our infrastrcture build and maintain it as code. 
+GCP is easy to use, but it requires a lot of manual effort when shutting down and later recreating all of the K8s clusters, load balancers, etc. This is frequently done during development to avoid GCP's daily charges. We are considering solutions that support Infrastructure as Code, such as Puppet, Chef, Ansible, etc, and leaning towards Terraform or Terragrunt at this point.
 
 ## Continuous Integration and Continuous Deployment (CI/CD) pipeline
 
-As the solution matures we will automate the build, integration, and deployment pipeline to allow for more rapid development and validation of changes and then deployment to a working system.
+As the solution matures, we are considering to automate the build, integration, and deployment pipeline to allow for more rapid development and validation of changes and then deployment to a working system. The project already uses GCP's Cloud Build feature, that triggers the project's build whenever a change is submitted to the Github repo's develop branch. However, the team is researching if there are better alternatives for the build pipeline through other tools like Jenkins 2 or other commericial CI/CD solutions.
 
 ## RESTful APIs 
 
@@ -201,7 +201,7 @@ This section summarizes the areas of responsibility of the respective members of
 Acknowledgment {#acknowledgment .unnumbered}
 ==============
 
-The authors would like to thank ...
+
 
 References {#references .unnumbered}
 ==========
