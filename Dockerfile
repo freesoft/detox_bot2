@@ -10,7 +10,7 @@ RUN add-apt-repository universe
 RUN apt-get update && apt-get install -y \
     curl \
     git \
-    python3.6 \
+    python3-minimal \
     python3-pip && \ 
     rm -rf /var/lib/apt/lists/*
 
