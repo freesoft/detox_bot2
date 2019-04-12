@@ -12,19 +12,34 @@ import sys
 import time
 from builtins import range
 
-import nltk
+#import nltk
 import numpy as np
 import pandas as pd
 from joblib import dump, load
-from nltk import word_tokenize,sent_tokenize
-from nltk.stem import WordNetLemmatizer
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.metrics import classification_report,confusion_matrix
 
+from pyspark.sql import SparkSession, SQLContext
+from pyspark.ml.feature import HashingTF, IDF, Tokenizer, StopWordsRemover
+from pyspark.sql.types import DoubleType
+#from pyspark.ml.tuning import ParamGridBuilder, TrainValidationSplit
+from pyspark.ml.classification import NaiveBayes
+from pyspark.sql.functions import col, expr, when
+from pyspark.ml import Pipeline, PipelineModel
+from pyspark.ml.evaluation import BinaryClassificationEvaluator, MulticlassClassificationEvaluator
 # includes all the defined constant variables.
+from pyspark.ml.tuning import CrossValidator, ParamGridBuilder
+#from dbmlModelExport import ModelExport
+
 import constant
+
+# code to make Windows happy with spark
+#spark_path = os.path.join(*['C:','\\Progra~2', 'spark-2.3.3-bin-hadoop2.7'])
+##spark_path = r"C:\\Progra~2\\spark-2.3.3-bin-hadoop2.7\\spark-2.3.3-bin-hadoop2.7" # spark installed folder
+#os.environ['SPARK_HOME'] = spark_path
+#sys.path.insert(0, os.path.join(*[spark_path,"bin"]))
+#sys.path.insert(0, os.path.join(*[spark_path, "python', 'pyspark"]))
+#sys.path.insert(0, os.path.join(*[spark_path, "python', 'lib', 'pyspark.zip"]))
+#sys.path.insert(0, os.path.join(*[spark_path, "python','lib', 'py4j-0.10.7-src.zip"]))
+
 
 os.environ['OMP_NUM_THREADS'] = '2'
 
@@ -37,97 +52,146 @@ os.environ['OMP_NUM_THREADS'] = '2'
 # then you need to delete two files so that program recrete them. Those two files you need to delete are "classifier.joblib", and "vectorizer.joblib"
 # defined in constant.py.
 class ToxicityClassifier():
+
     def __init__(self):
 
         start_time = time.time()
-
-        self.stopwords = set(w.rstrip() for w in open('stopwords.txt'))
-        self.vectorizer = TfidfVectorizer(tokenizer=ToxicityClassifier.tokenizer, max_features=10000, stop_words=self.stopwords, analyzer='word', dtype=np.float32)
-
-        # creating the Multinomial Naive Bayes with Laplacian smoothing.
-        self.classifier = MultinomialNB()
+        
+        # start spark session
+        spark = SparkSession.builder.appName("DetoxBot").getOrCreate()
+        self.sc = spark.sparkContext
+        self.sqlContext = SQLContext(self.sc)
+        self.stopwords = list(set(w.rstrip() for w in open('stopwords.txt')))
+#        sc = spark.sparkContext
+#        sqlContext = SQLContext(sc)
+#        stopwords = list(set(w.rstrip() for w in open('stopwords.txt')))
 
         # if and only if model doesn't exist in the file, execute this block, means you need to delete the existing model file to re-run this.
-        if os.path.exists(constant.CLASSIFIER_FILE) == False:
+        if os.path.exists(constant.MODEL_DIR) == False:
             print("Can't find existing classifier stored in the file. Creating one...")
-
-            # for df in pd.read_csv(constant.TRAINING_DATA_PATH, delimiter=',', error_bad_lines=True, skipinitialspace=True, chunksize=constant.CVS_CHUNKSIZE, iterator=True):
-            dtypes = {
-                'toxic' : 'uint8',
-                'severe_toxic' : 'uint8',
-                'obscene' : 'uint8',
-                'threat' : 'uint8',
-                'insult' : 'uint8',
-                'identity_hate' : 'uint8'
-            }
-
-            df = pd.read_csv(constant.TRAINING_DATA_PATH, dtype=dtypes)
-            df = df.replace('\n','', regex=True)
-
-            toxic = \
-                df['toxic'] | \
-                df['severe_toxic'] | \
-                df['obscene'] | \
-                df['threat'] | \
-                df['insult'] | \
-                df['identity_hate'] 
             
-            training = self.vectorizer.fit_transform(df['comment_text'])  
-            del df
-            gc.collect()
+            # read data
+            spDF = self.sqlContext.read.csv(constant.TRAINING_DATA_PATH, 
+            #spDF = sqlContext.read.csv(constant.TRAINING_DATA_PATH, 
+                                       header="true", 
+                                       multiLine=True, 
+                                       inferSchema=True,
+                                       escape="\"")
+            
+            # generate label column
+            spDF = spDF.withColumn('label', 
+                spDF['toxic'] + \
+                spDF['severe_toxic'] +  \
+                spDF['obscene'] + \
+                spDF['threat'] + \
+                spDF['insult'] + \
+                spDF['identity_hate'] )
+            spDF = spDF.withColumn('label', when(spDF['label'] > 0, 1).otherwise(0) )
+                
+            # generate features column
+            # tokenize
+            tokenizer = Tokenizer(inputCol="comment_text", outputCol="words")
+            wordsData = tokenizer.transform(spDF)
+            
+            # stop words remover
+            remover = StopWordsRemover(inputCol="words", outputCol="filtered", stopWords=self.stopwords)
+            #remover = StopWordsRemover(inputCol="words", outputCol="filtered", stopWords=stopwords)
+            filteredData = remover.transform(wordsData)
+            
+            # term frequency transformation
+            hashingTF = HashingTF(inputCol="filtered", outputCol="rawFeatures")
+            featurizedData = hashingTF.transform(filteredData)
+            
+            # inverse document frequency transformations
+            idf = IDF(inputCol="rawFeatures", outputCol="features")
+            idfModel = idf.fit(featurizedData)
+            rescaledData = idfModel.transform(featurizedData)
 
+            # split data into train and test
+            training, test = spDF.randomSplit([0.8, 0.2], seed = 0)
+            
+            #rescaledData.select("features").show()
+            # naive bais classification
+            nb = NaiveBayes(smoothing=1.0, labelCol='label', featuresCol='features')
+            
+            # configure ML pipeline
+            pipeline = Pipeline(stages=[tokenizer, remover, hashingTF, idf, nb])
+            
+            # fit the pipeline to training documents
             print("Initiating training...")
-            train_x, test_x, train_y, test_y = train_test_split(training.toarray(), toxic.values, test_size=0.2)
+            self.model = pipeline.fit(training)
             del training
             gc.collect()
-            self.classifier.fit(train_x, train_y)
-
-            del train_x, train_y
-            gc.collect()
-                
             print("Completed training. Generating classification result...")
-            pred_y = self.classifier.predict(test_x)
+            
+            # make predictions
+            predictions = self.model.transform(test)
 
-            del test_x
+            # evaluate prediction
+            TP = predictions.select("label", "prediction").filter((predictions.label == 1) & (predictions.prediction == 1)).count()
+            TN = predictions.select("label", "prediction").filter((predictions.label == 0) & (predictions.prediction == 0)).count()
+            FP = predictions.select("label", "prediction").filter((predictions.label == 0) & (predictions.prediction == 1)).count()
+            FN = predictions.select("label", "prediction").filter((predictions.label == 1) & (predictions.prediction == 0)).count()
+            total = predictions.select("label").count()
+
+            accuracy	= (TP + TN) / total
+            precision   = TP / (TP + FP)
+            recall      = TP / (TP + FN)
+            F1		= 2/(1/precision + 1/recall)
+
+            print('accuracy:', accuracy)
+            print('precision:', precision)
+            print('recall:', recall)
+            print('F1:', F1)
+#            
+#            evaluator = BinaryClassificationEvaluator(rawPredictionCol='prediction')
+#            accuracy = evaluator.evaluate(predictions)
+#            print("Test set binarcy evaluator ara under curve accuracy = " + str(accuracy))
+#            
+#            mcevaluator = MulticlassClassificationEvaluator(predictionCol='prediction', metricName='weightedPrecision')
+#            mcaccuracy = mcevaluator.evaluate(predictions)
+#            print("Test set multiclass weighted precision accuracy = " + str(mcaccuracy))
+#            
+#            mcevaluator = MulticlassClassificationEvaluator(predictionCol='prediction', metricName='weightedRecall')
+#            mcaccuracy = mcevaluator.evaluate(predictions)
+#            print("Test set multiclass weighted recall  = " + str(mcaccuracy))
+#            
+#            mcevaluator = MulticlassClassificationEvaluator(predictionCol='prediction', metricName='accuracy')
+#            mcaccuracy = mcevaluator.evaluate(predictions)
+#            print("Test set multiclass accuracy = " + str(mcaccuracy))
+#            
+#            mcevaluator = MulticlassClassificationEvaluator(predictionCol='prediction', metricName='f1')
+#            mcaccuracy = mcevaluator.evaluate(predictions)
+#            print("Test set multiclass f1 = " + str(mcaccuracy))
+#            
+            del test
             gc.collect()
 
-            print(classification_report(test_y, pred_y))
+            print("Storing model info into disk...")
+            self.model.save(constant.MODEL_DIR)
 
-            # store the classifier and vectorizer so it can be used later    
-            print("Storing classifier and vectorizer into disk...")
-            dump(self.classifier, constant.CLASSIFIER_FILE)
-            dump(self.vectorizer, constant.VECTORIZER_FILE)
         else:
-            print("Found existing classifier and vectorizer stored in the file. Loading...")
-            self.classifier = load(constant.CLASSIFIER_FILE)
-            self.vectorizer = load(constant.VECTORIZER_FILE)
+            print("Found existing model stored in the file. Loading...")
+            self.model = PipelineModel.load(constant.MODEL_DIR)
 
         # to measure programing execution time
         print("--- time spent for initializing the classifier : %s seconds ---" % (time.time() - start_time))
 
-
-    # get string value as paraemter and return tokenized array after some data massage, cleansing, etc.
-    # returned token array won't have any word with length of one or two
-    @staticmethod
-    def tokenizer(s):
-        wordnet_lemmatizer = WordNetLemmatizer()
-
-        s = s.lower() 
-        tokens = nltk.tokenize.word_tokenize(s) 
-        tokens = [token for token in tokens if len(token) > 2] # remove words with two characters or less, those are probably pronoun and 
-        tokens = [wordnet_lemmatizer.lemmatize(token) for token in tokens] # change the word to base form with NLTK's WordNetLematizer
-        return tokens
+        
+    def stopClassifier(self):
+        # close spark session
+        self.sc.stop()
 
     # with given parameter s, it returns whether s is toxic or not
     # it is not expecting any arrays, it should be just single string value
     def isToxic(self, s):
 
-        pred = self.classifier.predict( self.vectorizer.transform( np.array([s])).toarray() )
+        pred_df = self.model.transform(s)
+        pred_list = pred_df.select('prediction').collect()
+        pred = [bool(row.prediction) for row in pred_list]
         
-        if pred[0] == 1:
-            return True
-        else:
-            return False
+        return pred
+        
 
 # main function if you need to run it separated, not through chatbot.py.
 # The function will load local test CSV file and execute the prediction, instead of getting messages from TwitchTV channel it has deployed.
@@ -143,19 +207,23 @@ def main():
     toxicClassifier = ToxicityClassifier()
 
     # loading chat logs from csv file
-    df = pd.read_csv(test_data_path, delimiter=',', error_bad_lines=True, skipinitialspace=True)
-    df = df.replace('\n','', regex=True)
+    df = toxicClassifier.sqlContext.read.csv(test_data_path, 
+                                       header="true", 
+                                       multiLine=True, 
+                                       inferSchema=True,
+                                       escape="\"")
 
     # transform test data's chat log to the existing vecorizer so it can be used for prediction        
-    data = toxicClassifier.vectorizer.transform( df['comment_text'] )
-    preds = toxicClassifier.classifier.predict( data )
-
+    preds = toxicClassifier.isToxic(df)
+    
     # print(pd.DataFrame(preds, columns=toxicClassifier.classifier.classes_))
-    for i in range(len(preds)):
-        if preds[i] == 1:
-            print("TOXIC>>> " + df['comment_text'].values[i])            
-
-
+    text = df.select('comment_text').collect()
+    for i, p in enumerate(preds):
+        #if p == 1:
+        if p == True:
+            print("TOXIC>>> " + text[i].comment_text)            
+            
+    toxicClassifier.stopClassifier()
 # just in case if need to run the test locally without TwitchBox working together
 if __name__ == "__main__":
 
