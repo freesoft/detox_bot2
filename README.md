@@ -1,9 +1,6 @@
 # detox_bot2
 
-## Branching strategy - Please Read before working on branch
-
-* The project uses GitFlow branching strategy. If you are not familiar to this, read https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
-* TL;DR; always create your feature branch from develop branch, work on your feature branch and test, when you think your feature branch is good to deploy to production, then merge to develop branch. Develop branch should always be "ready to production" status. When we deploy, we are going to create new release branch from develop branch, make artifact(or docker image) and deploy to production, and merge the release branch to master branch.
+Please read https://github.com/freesoft/detox_bot2/wiki/Project-Git-Branching-Strategy for project branching strategy.
 
 ## Important Key Dates
 
