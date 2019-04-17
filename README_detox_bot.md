@@ -164,6 +164,15 @@ Check out [https://dev.twitch.tv/docs/irc/guide/](https://dev.twitch.tv/docs/irc
 
 Please [open a new issue](https://github.com/freesoft/detox_bot/issues/new) on this Github repository and I'll take a look shortly.
  
+## Deployment ##
+Failed deployment cluster config:
+1 node, total of 1 vCPU and 1.7 GB memory.
+
+Successful deployment cluster config:
+
+1 node, total of 2 vCPUs with 7.5 GB. idle CPU utilization (current/target value): 19%/80%
+
+2 node, total of 2 vCPUs with 3.4 GB. idle CPU utilization (current/target value): 19%/80%
 ## Resources ##
 
 * NLTK : https://www.nltk.org
