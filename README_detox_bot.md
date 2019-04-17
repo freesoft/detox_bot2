@@ -72,6 +72,12 @@ With those image id, run
 ```
 docker run -it -d <image_id>
 ```
+
+If that didn't work for you, try overwriting the port
+```
+docker run -it -d -p 5000:5000 uiuc-cs410-fall2018:detox
+```
+
 Startup will take some time. If you want to see what's happening during the docker run, omit `-d`. <br/>
 If startup success, then access to `localhost:5000` on your web browser. If web chat UI doesn't show up, then there is something wrong but I won't try to explain what could go wrong here since it will take too much time. Just use Heroku instance for testing!!!
 

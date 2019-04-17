@@ -1,33 +1,32 @@
 '''
-Author : Wonhee Jung ( wonheej2@illinois.edu, wonhee.jung@gmail.com )
+Author : Wonhee Jung, Cindy Tseng ( wonheej2@illinois.edu, wonhee.jung@gmail.com, cindyst2@illinois.edu )
 Since : Nov, 2018
 
 UIUC MCS-DS CS410 Fall 2018 Project.
 '''
-import csv
+#import csv
 import gc
 import os
 import os.path
 import sys
 import time
-from builtins import range
+#from builtins import range
 
 #import nltk
 import numpy as np
-import pandas as pd
-from joblib import dump, load
+#import pandas as pd
+#from joblib import dump, load
 
 from pyspark.sql import SparkSession, SQLContext
 from pyspark.ml.feature import HashingTF, IDF, Tokenizer, StopWordsRemover
-from pyspark.sql.types import DoubleType
+from pyspark.sql.types import StringType
 #from pyspark.ml.tuning import ParamGridBuilder, TrainValidationSplit
 from pyspark.ml.classification import NaiveBayes
-from pyspark.sql.functions import col, expr, when
+#from pyspark.sql.functions import col, expr, when
 from pyspark.ml import Pipeline, PipelineModel
-from pyspark.ml.evaluation import BinaryClassificationEvaluator, MulticlassClassificationEvaluator
+#from pyspark.ml.evaluation import BinaryClassificationEvaluator, MulticlassClassificationEvaluator
 # includes all the defined constant variables.
-from pyspark.ml.tuning import CrossValidator, ParamGridBuilder
-#from dbmlModelExport import ModelExport
+#from pyspark.ml.tuning import CrossValidator, ParamGridBuilder
 
 import constant
 
@@ -58,8 +57,8 @@ class ToxicityClassifier():
         start_time = time.time()
         
         # start spark session
-        spark = SparkSession.builder.appName("DetoxBot").getOrCreate()
-        self.sc = spark.sparkContext
+        self.spark = SparkSession.builder.appName("DetoxBot").getOrCreate()
+        self.sc = self.spark.sparkContext
         self.sqlContext = SQLContext(self.sc)
         self.stopwords = list(set(w.rstrip() for w in open('stopwords.txt')))
 #        sc = spark.sparkContext
@@ -143,27 +142,7 @@ class ToxicityClassifier():
             print('precision:', precision)
             print('recall:', recall)
             print('F1:', F1)
-#            
-#            evaluator = BinaryClassificationEvaluator(rawPredictionCol='prediction')
-#            accuracy = evaluator.evaluate(predictions)
-#            print("Test set binarcy evaluator ara under curve accuracy = " + str(accuracy))
-#            
-#            mcevaluator = MulticlassClassificationEvaluator(predictionCol='prediction', metricName='weightedPrecision')
-#            mcaccuracy = mcevaluator.evaluate(predictions)
-#            print("Test set multiclass weighted precision accuracy = " + str(mcaccuracy))
-#            
-#            mcevaluator = MulticlassClassificationEvaluator(predictionCol='prediction', metricName='weightedRecall')
-#            mcaccuracy = mcevaluator.evaluate(predictions)
-#            print("Test set multiclass weighted recall  = " + str(mcaccuracy))
-#            
-#            mcevaluator = MulticlassClassificationEvaluator(predictionCol='prediction', metricName='accuracy')
-#            mcaccuracy = mcevaluator.evaluate(predictions)
-#            print("Test set multiclass accuracy = " + str(mcaccuracy))
-#            
-#            mcevaluator = MulticlassClassificationEvaluator(predictionCol='prediction', metricName='f1')
-#            mcaccuracy = mcevaluator.evaluate(predictions)
-#            print("Test set multiclass f1 = " + str(mcaccuracy))
-#            
+          
             del test
             gc.collect()
 
@@ -182,15 +161,21 @@ class ToxicityClassifier():
         # close spark session
         self.sc.stop()
 
+    # tokenizer only works off of dataframe, need to convert text to dataframe
+    # before we can pass it to the stored ML pipeline
+    def txtIsToxic(self, txt):
+        df = self.sqlContext.createDataFrame([txt], StringType())
+        txtDF = df.withColumnRenamed('value', 'comment_text')
+   
+        return self.isToxic(txtDF)
+    
     # with given parameter s, it returns whether s is toxic or not
     # it is not expecting any arrays, it should be just single string value
     def isToxic(self, s):
 
         pred_df = self.model.transform(s)
         pred_list = pred_df.select('prediction').collect()
-        pred = [bool(row.prediction) for row in pred_list]
-        
-        return pred
+        return np.any(pred_list)
         
 
 # main function if you need to run it separated, not through chatbot.py.
@@ -200,9 +185,9 @@ def main():
     print("Initiating...")
 
     # below file has smaller set of test data. Enable it instead if you want quicker testing
+    #test_data_path = os.path.join(os.getcwd(), "data/test_sample.csv")
     test_data_path = "data/test_sample.csv"
     # below file has full set of test data. Try with it if you see more dresult. Beware : it will take some time.
-    #test_data_path = "data/test.csv"
 
     toxicClassifier = ToxicityClassifier()
 
@@ -214,13 +199,12 @@ def main():
                                        escape="\"")
 
     # transform test data's chat log to the existing vecorizer so it can be used for prediction        
-    preds = toxicClassifier.isToxic(df)
-    
-    # print(pd.DataFrame(preds, columns=toxicClassifier.classifier.classes_))
+    preds_list = toxicClassifier.model.transform(df).select('prediction').collect()
+    preds = [row.prediction for row in preds_list]
     text = df.select('comment_text').collect()
+    #print('preds', preds, 'text', text)
     for i, p in enumerate(preds):
-        #if p == 1:
-        if p == True:
+        if p == 1:
             print("TOXIC>>> " + text[i].comment_text)            
             
     toxicClassifier.stopClassifier()
