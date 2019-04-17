@@ -4,41 +4,25 @@ Since : Nov, 2018
 
 UIUC MCS-DS CS410 Fall 2018 Project.
 '''
-#import csv
+
 import gc
 import os
 import os.path
 import sys
 import time
-#from builtins import range
-
-#import nltk
 import numpy as np
-#import pandas as pd
-#from joblib import dump, load
-
 from pyspark.sql import SparkSession, SQLContext
 from pyspark.ml.feature import HashingTF, IDF, Tokenizer, StopWordsRemover
 from pyspark.sql.types import StringType
 #from pyspark.ml.tuning import ParamGridBuilder, TrainValidationSplit
 from pyspark.ml.classification import NaiveBayes
-#from pyspark.sql.functions import col, expr, when
+from pyspark.sql.functions import col, expr, when
 from pyspark.ml import Pipeline, PipelineModel
 #from pyspark.ml.evaluation import BinaryClassificationEvaluator, MulticlassClassificationEvaluator
 # includes all the defined constant variables.
 #from pyspark.ml.tuning import CrossValidator, ParamGridBuilder
 
 import constant
-
-# code to make Windows happy with spark
-#spark_path = os.path.join(*['C:','\\Progra~2', 'spark-2.3.3-bin-hadoop2.7'])
-##spark_path = r"C:\\Progra~2\\spark-2.3.3-bin-hadoop2.7\\spark-2.3.3-bin-hadoop2.7" # spark installed folder
-#os.environ['SPARK_HOME'] = spark_path
-#sys.path.insert(0, os.path.join(*[spark_path,"bin"]))
-#sys.path.insert(0, os.path.join(*[spark_path, "python', 'pyspark"]))
-#sys.path.insert(0, os.path.join(*[spark_path, "python', 'lib', 'pyspark.zip"]))
-#sys.path.insert(0, os.path.join(*[spark_path, "python','lib', 'py4j-0.10.7-src.zip"]))
-
 
 os.environ['OMP_NUM_THREADS'] = '2'
 
@@ -61,9 +45,6 @@ class ToxicityClassifier():
         self.sc = self.spark.sparkContext
         self.sqlContext = SQLContext(self.sc)
         self.stopwords = list(set(w.rstrip() for w in open('stopwords.txt')))
-#        sc = spark.sparkContext
-#        sqlContext = SQLContext(sc)
-#        stopwords = list(set(w.rstrip() for w in open('stopwords.txt')))
 
         # if and only if model doesn't exist in the file, execute this block, means you need to delete the existing model file to re-run this.
         if os.path.exists(constant.MODEL_DIR) == False:
@@ -71,7 +52,6 @@ class ToxicityClassifier():
             
             # read data
             spDF = self.sqlContext.read.csv(constant.TRAINING_DATA_PATH, 
-            #spDF = sqlContext.read.csv(constant.TRAINING_DATA_PATH, 
                                        header="true", 
                                        multiLine=True, 
                                        inferSchema=True,
@@ -94,7 +74,6 @@ class ToxicityClassifier():
             
             # stop words remover
             remover = StopWordsRemover(inputCol="words", outputCol="filtered", stopWords=self.stopwords)
-            #remover = StopWordsRemover(inputCol="words", outputCol="filtered", stopWords=stopwords)
             filteredData = remover.transform(wordsData)
             
             # term frequency transformation
@@ -109,7 +88,6 @@ class ToxicityClassifier():
             # split data into train and test
             training, test = spDF.randomSplit([0.8, 0.2], seed = 0)
             
-            #rescaledData.select("features").show()
             # naive bais classification
             nb = NaiveBayes(smoothing=1.0, labelCol='label', featuresCol='features')
             
@@ -185,7 +163,6 @@ def main():
     print("Initiating...")
 
     # below file has smaller set of test data. Enable it instead if you want quicker testing
-    #test_data_path = os.path.join(os.getcwd(), "data/test_sample.csv")
     test_data_path = "data/test_sample.csv"
     # below file has full set of test data. Try with it if you see more dresult. Beware : it will take some time.
 
