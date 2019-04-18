@@ -5,7 +5,7 @@ ENV PYSPARK_PYTHON=python3
 ENV TERM xterm
 ENV LC_ALL C.UTF-8
 ENV FLASK_APP webapp.py
-LABEL maintainer="Cindy Tseng(cindyst2@illinois.edu)"
+LABEL authors="Cindy Tseng(cindyst2@illinois.edu), Wonhee Jung (wonheej2@illinois.edu)"
 
 # install java
 RUN apt-get update && \
@@ -13,7 +13,7 @@ RUN apt-get update && \
         expect git vim zip unzip wget openjdk-8-jdk wget sudo
 
 # install python3
-RUN apt-get install -y python3 python3-pip python3-dev 
+RUN apt-get install -y python3 python3-pip python-dev 
 
 # Download and install spark
 RUN     cd /usr/local/ &&\
@@ -39,7 +39,7 @@ RUN cp /usr/local/spark/conf/log4j.properties.template /usr/local/spark/conf/log
 # Set relevant environment variables to simplify usage of spark
 ENV SPARK_HOME /usr/local/spark
 ENV PATH="/usr/local/spark/bin:${PATH}"
-RUN chmod a+rwx -R /usr/local/spark/
+#RUN chmod a+rwx -R /usr/local/spark/
 
 # setup flask
 RUN mkdir -p /app

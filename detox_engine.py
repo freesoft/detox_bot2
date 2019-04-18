@@ -1,8 +1,8 @@
 '''
-Author : Wonhee Jung, Cindy Tseng ( wonheej2@illinois.edu, wonhee.jung@gmail.com, cindyst2@illinois.edu )
-Since : Nov, 2018
+Author : Wonhee Jung (wonheej2@illinois.edu, wonhee.jung@gmail.com), Cindy Tseng (cindyst2@illinois.edu )
+Since : Feb, 2019
 
-UIUC MCS-DS CS410 Fall 2018 Project.
+UIUC MCS-DS CS498 CCA Spring 2019 Project.
 '''
 
 import gc
@@ -11,16 +11,13 @@ import os.path
 import sys
 import time
 import numpy as np
+import atexit
 from pyspark.sql import SparkSession, SQLContext
 from pyspark.ml.feature import HashingTF, IDF, Tokenizer, StopWordsRemover
 from pyspark.sql.types import StringType
-#from pyspark.ml.tuning import ParamGridBuilder, TrainValidationSplit
 from pyspark.ml.classification import NaiveBayes
-from pyspark.sql.functions import col, expr, when
+from pyspark.sql.functions import when
 from pyspark.ml import Pipeline, PipelineModel
-#from pyspark.ml.evaluation import BinaryClassificationEvaluator, MulticlassClassificationEvaluator
-# includes all the defined constant variables.
-#from pyspark.ml.tuning import CrossValidator, ParamGridBuilder
 
 import constant
 
@@ -184,7 +181,8 @@ def main():
         if p == 1:
             print("TOXIC>>> " + text[i].comment_text)            
             
-    toxicClassifier.stopClassifier()
+    atexit.register(toxicClassifier.stopClassifier)
+    
 # just in case if need to run the test locally without TwitchBox working together
 if __name__ == "__main__":
 

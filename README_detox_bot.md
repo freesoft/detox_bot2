@@ -63,7 +63,7 @@ The project has Dockerfile script that you can use for Docker image build. Also,
 Install [Docker](https://www.docker.com) for your macine and checkout the git repo. Once it's ready, then run
 
 ```
-docker build -t uiuc-cs410-fall2018:detox .
+docker build -t uiuc-cs498-cca-spring2019:detox .
 ```
 Yea, that's "." at the very end and one space between "x" and ".". So careful not to omit ".". The build will take some time.<br/>
 Once the build is done, you'll be able to see some hash value at the end of the build. ( or `docker images` and get the image id with the latest build ).<br/>
@@ -75,7 +75,7 @@ docker run -it -d <image_id>
 
 If that didn't work for you, try overwriting the port
 ```
-docker run -it -d -p 5000:5000 uiuc-cs410-fall2018:detox
+docker run -it -d -p 5000:5000 uiuc-cs498-cca-spring2019:detox
 ```
 
 In case there are errors stopping the container, do this
