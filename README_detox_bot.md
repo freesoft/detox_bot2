@@ -63,7 +63,7 @@ The project has Dockerfile script that you can use for Docker image build. Also,
 Install [Docker](https://www.docker.com) for your macine and checkout the git repo. Once it's ready, then run
 
 ```
-docker build -t uiuc-cs410-fall2018:detox .
+docker build -t uiuc-cs498-cca-spring2019:detox .
 ```
 Yea, that's "." at the very end and one space between "x" and ".". So careful not to omit ".". The build will take some time.<br/>
 Once the build is done, you'll be able to see some hash value at the end of the build. ( or `docker images` and get the image id with the latest build ).<br/>
@@ -72,6 +72,23 @@ With those image id, run
 ```
 docker run -it -d <image_id>
 ```
+
+If that didn't work for you, try overwriting the port
+```
+docker run -it -d -p 5000:5000 uiuc-cs498-cca-spring2019:detox
+```
+
+In case there are errors stopping the container, do this
+
+```
+sudo aa-status 
+sudo systemctl disable apparmor.service --now 
+sudo service apparmor teardown 
+sudo aa-status 
+```
+
+Then try stopping the container again. It should work now.
+
 Startup will take some time. If you want to see what's happening during the docker run, omit `-d`. <br/>
 If startup success, then access to `localhost:5000` on your web browser. If web chat UI doesn't show up, then there is something wrong but I won't try to explain what could go wrong here since it will take too much time. Just use Heroku instance for testing!!!
 
@@ -147,6 +164,15 @@ Check out [https://dev.twitch.tv/docs/irc/guide/](https://dev.twitch.tv/docs/irc
 
 Please [open a new issue](https://github.com/freesoft/detox_bot/issues/new) on this Github repository and I'll take a look shortly.
  
+## Deployment ##
+Failed deployment cluster config:
+1 node, total of 1 vCPU and 1.7 GB memory.
+
+Successful deployment cluster config:
+
+1 node, total of 2 vCPUs with 7.5 GB. idle CPU utilization (current/target value): 19%/80%
+
+2 node, total of 2 vCPUs with 3.4 GB. idle CPU utilization (current/target value): 19%/80%
 ## Resources ##
 
 * NLTK : https://www.nltk.org
