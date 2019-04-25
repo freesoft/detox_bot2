@@ -181,3 +181,18 @@ Successful deployment cluster config:
 * Heroku : http://heroku.com
 * Docker Hub : http://dockerhub.com
 
+## Latest Detox Bot Accuracy ##
+accuracy: 0.9262008733624454                                                    
+label 1 precision: 0.6901072705601907
+label 1 recall: 0.5819095477386935
+label 1 F1: 0.6901072705601907
+label 0 precision: 0.9500060088931619
+label 0 recall: 0.968156766687079
+label 0 F1: 0.950006008893162
+
+Further todo: apply stemming or lemmentization. But there's no native support in pyspark. See the following websites for guidelines
+
+[https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/3923635548890252/1357850364289680/4930913221861820/latest.html]
+[https://towardsdatascience.com/natural-language-processing-in-apache-spark-using-nltk-part-1-2-58c68824f660 #PorterStemmer()]
+
+pretrained word2vec or fasttext model is in binary format, however pyspark's word2vec is in praquet format. Need to convert the data before using.
