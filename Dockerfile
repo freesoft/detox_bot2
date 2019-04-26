@@ -13,7 +13,7 @@ RUN apt-get update && \
         expect git vim zip unzip wget openjdk-8-jdk wget sudo
 
 # install python3
-RUN apt-get install -y python3 python3-pip python-dev 
+RUN apt-get install -y python3 python3-pip
 
 # Download and install spark
 RUN     cd /usr/local/ &&\
