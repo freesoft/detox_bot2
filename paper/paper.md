@@ -27,6 +27,7 @@ package:
 - name: inputenc
   options: utf8
 ---
+\color{gray}
 
 Introduction
 ============
@@ -40,6 +41,7 @@ Datasets
 ========
 
 There is a dearth of labelled datasets for training classifiers to detect toxic comments. An online search and literature review were conducted on IEEE Xplore, Scopus, and Science Direct. We concluded that the best dataset available is Toxic Comment Classification Challenge dataset released by Jigsaw and Google on Kaggle in 2018, see [@jigsaw2018]. Note that three additional datasets were identified - from Reddit [@eloi2018;@chandra2018], Wikipedia [@eloi2018], and Twitter [@vanaken2018;@chandra2018]. However, the datasets were not appropriate for use with our classifier. 
+
 
 Technologies and Tools
 =======================
@@ -139,6 +141,27 @@ It has been challenging to move our classifier from scikit-learn to the PySpark 
 
 See the next section "Future Work" for details about the work to be undertaken in the coming weeks to develop the final system.
 
+\color{black}
+Related Work
+============
+
+We conducted a focused search of recent academic literature to identify related work and to understand the current state-of-the-art in toxic chat detection systems. The search was performed on Scopus, Science Direct, IEEE, and Google Scholar. Based on the content of the abstracts, we identified nine research articles that were futher analyzed for content. 
+
+None of the papers dealt with commercial-scale toxic chat detection systems. Rather, research focuses on algorithmic performance of the toxic chat classifiers. We thus feel that this paper fills an important gap in the literature, as it describes a complete framework for deploying the toxic chat classification function at scale on the web. 
+
+The papers we referenced can be grouped into the following thematic categories:
+
+a) reports on specific implementations of the toxic chat classifier
+b) comparison of different toxic chat classification approaches and algorithms
+c) research into countermeasures for adversarial toxic comments, written specifically to circumvent automatica toxic chat detection
+
+We used this research to inform the selection of our toxic chat classifier. However, our goal for this project is primarily to define and prototype a cloud computing application framework for toxic chat detection. Our concern was only tangentially related to the performance of the comment classification algorithm itself. A properly designed system will allow for different algorithms to be plugged into the architecture as the state of the art advances with respect to toxic comment classification.
+
+The research concludes that deep learning approaches (CNN, RNN) do, as expected, yield the best performance [Rybinski;Saif;Spiros,Aikten]. However, shallow learning techniques such as Linear Regression, NBSVMs, and SVMs perform well, and may require significantly less work than deep learning networks, which require network architecture deisgn and time-consiming validation and tuning [Saif;Rybinski;Noever].  
+
+The research also addresses specific concerns about the source data for toxic chat, such as imbalanced classes (i.e. many more non-toxic comments than toxic comments) [Rybinski] and pre-processing of text data to deal with typos, stylized spelling, etc.[Fahim] There is also a sub-set of research on dealing with adversarial comments (i.e. comments intentionally designed to defeat text classifiers  [Nestor]. We leave the augmented processing suggest in some of these articles to future work. 
+
+\color{gray}
 Future Work
 ===========
 
