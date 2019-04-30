@@ -245,8 +245,7 @@ This section summarizes the areas of responsibility of the respective members of
 Acknowledgment {#acknowledgment .unnumbered}
 ==============
 
-
+\color{black}
 
 References {#references .unnumbered}
 ==========
-
