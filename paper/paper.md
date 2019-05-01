@@ -27,6 +27,7 @@ package:
 - name: inputenc
   options: utf8
 ---
+\color{gray}
 
 Introduction
 ============
@@ -40,6 +41,7 @@ Datasets
 ========
 
 There is a dearth of labelled datasets for training classifiers to detect toxic comments. An online search and literature review were conducted on IEEE Xplore, Scopus, and Science Direct. We concluded that the best dataset available is Toxic Comment Classification Challenge dataset released by Jigsaw and Google on Kaggle in 2018, see [@jigsaw2018]. Note that three additional datasets were identified - from Reddit [@eloi2018;@chandra2018], Wikipedia [@eloi2018], and Twitter [@vanaken2018;@chandra2018]. However, the datasets were not appropriate for use with our classifier. 
+
 
 Technologies and Tools
 =======================
@@ -139,6 +141,48 @@ It has been challenging to move our classifier from scikit-learn to the PySpark 
 
 See the next section "Future Work" for details about the work to be undertaken in the coming weeks to develop the final system.
 
+\color{black}
+Related Work
+============
+
+## Literature
+We conducted a focused search of recent academic literature to identify related work and to understand the current state-of-the-art in toxic chat detection systems. The search was performed on Scopus, Science Direct, IEEE, and Google Scholar. Based on the content of the abstracts, we identified nine research articles that were futher analyzed for content. 
+
+The research we found did not deal with the systems themselves, but rather with the performance of the classification algorithm. We thus feel our work fills an important gap in the literature in describing a framework for deploying the toxic chat classification function at scale on the web for real-world use.
+
+## Key topics
+
+The topic coverage in the papers we reviewed falls into the following general categories:
+
+a) reports on specific implementations of the toxic chat classifier
+b) comparison of different toxic chat classification approaches and algorithms
+c) methods for dealing with data quality issues and imbalanced class labels
+d) countermeasures for adversarial toxic comments (i.e. comments written specifically to circumvent automatic toxic chat detection)
+
+While the research helps to inform our selection of a toxic chat classifier, our goal for this project is primarily to define and prototype a cloud computing application framework for toxic chat detection. Our concern is only tangentially related to the performance of the comment classification algorithm itself. A properly designed system will allow for different algorithms to be plugged into the architecture as the state of the art advances with respect to toxic comment classification.
+
+## Important conclusions from literature
+
+For our purposes, the research suggests a number of helpful conclusions.
+
+1. Deep learning approaches such as convolutional or recurrent neural networks consistetly out-perform shallow approaches [@rybinski2018;@saif2018;@spiros2018,@vanaken2018]. However, shallow learning techniques - and especially Linear Regression, NBSVMs, and SVMs - perform quite well and may require substantially less effort to develop and tune that neural networks. There is thus a tradeoff to consider as to whether the relatively small gains in accuracy are worth the time spent building, tuning, and maintaining a complex model [@saif2018;@rybinski2018;@david2018].  
+
+2. Class labels are imbalanced (i.e. there are many more non-toxic comments than toxic comments in the training data) but there are techniques available for augmenting data to rebalance the classes [@rybinski2018]. 
+   
+3. Chat comments, especially those entered on a cell phone, often contain typos and stylized or abbreviated spelling that present challenges to effective tokenization. However, there are techniques for normalizing such data [@fahim2018]
+   
+4. Notwithstanding issues such as imbalanced classes and garbled input data, even without augmentation simple classifiers can still perform well [@fahim2018]
+   
+5. Users may engage in adversarial chat, using intentionally vague or distorted text to defeat toxic chat classifiers [@nestor2018;@hossein2017]. We leave the augmented processing suggested in some of these articles to future work.
+
+## Google Perspective API
+
+An important intiative for toxic chat classification is the Perspective API (http://www.perspectiveapi.com), developed by Google and its incubation company Jigsaw. The API allows developers to access Google's toxic chat classifier via public interace. Most recent research uses Jigsaw's Wikipedia comment dataset [@jigsaw2018] (which is the basis of Kaggle's toxic comment challenge) to train and test classifiers.
+
+Use of the Perspective API can be considered in future work for this system.
+
+\color{gray}
+
 Future Work
 ===========
 
@@ -201,8 +245,7 @@ This section summarizes the areas of responsibility of the respective members of
 Acknowledgment {#acknowledgment .unnumbered}
 ==============
 
-
+\color{black}
 
 References {#references .unnumbered}
 ==========
-
