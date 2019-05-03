@@ -94,6 +94,7 @@ Preliminary Evaluation/Results
 
 ## Toxic chat classification accuracy
 
+\color{black}
 We originally used scikit-learn library to prototype a TF-IDF Multinomial Naive Bayes classifier to classify toxic comments. The performance for the scikit-learn based classifier was:
 
 \begin{center}
@@ -108,7 +109,7 @@ We originally used scikit-learn library to prototype a TF-IDF Multinomial Naive 
 \end{tabular}
 \end{center}
 
-we shuffled the training set and took 20% as the test set for evaluation. Note the performance numbers vary slightly with each run due to the random shuffling of data.  We showed the performance for none-toxic comments as well since erroneously flagging none-toxic comments could lead to users disatisfaction. However scikit-learn uses a lot of memory as training data gets bigger. Thus we moved to Apache Spark's ML library in order to achieve better scalability and high volume capacity. 
+We shuffled the training set and took 20% as the test set for evaluation. Note the performance numbers vary slightly with each run due to the random shuffling of data.  We showed the performance for non-toxic comments as well, since erroneously flagging non-toxic comments could lead to user dissatisfaction. However, scikit-learn uses a lot of memory as training data gets bigger. Thus we moved to Apache Spark's ML library in order to achieve better scalability and high volume capacity. 
 
 With PySpark's dataframe-based ML library, the performance metrics on the test set are: 
 
@@ -124,13 +125,14 @@ With PySpark's dataframe-based ML library, the performance metrics on the test s
 \end{tabular}
 \end{center}
 
-We can see that the pyspark's dataframe base classifier performs slightly better on toxic detection than that of scikit-learn (F1 score of 0.69 instead of 0.64). However since the overall network are pretty much the same performance are expected to be similar. Our main objective here is to prove that we can achieve similar results using Apache Spark framework while providing better scalability.
+We can see that PySpark's dataframe-based classifier performs slightly better on toxic detection than that of scikit-learn (F1 score of 0.69 instead of 0.64). However since the overall networks are nearly the same, performance is expected to be similar. Our main objective here is to prove that we can achieve similar results using the Apache Spark framework, while providing better scalability.
+\color{gray}
 
 ## Cloud Services
  
-We have evaluated several IaaS and PaaS cloud services, inclduing AWS, GCP, and Heroku. We have decided to use GCP because of its easy configuration of Kubernetes Clusters, which the team decided to use for docker container scale-out and deployment. K8s gets direct support from Google, and GCP already has GKE services. We were able to create a docker build pipeline using GCP's Cloud Build with a few mouse clicks. We tested our application and the following is the cluster requirement:
+We have evaluated several IaaS and PaaS cloud services, inclduing AWS, GCP, and Heroku. We have decided to use GCP because of its easy configuration of Kubernetes Clusters, which the team decided to use for docker container scale-out and deployment. K8s gets direct support from Google, and GCP already has GKE services. We were able to create a docker build pipeline using GCP's Cloud Build with a few mouse clicks. \color{black}We have tested our application and the following is the cluster requirement:
 
-1 node, total of 2 vCPUs with 7.5 GB. idle CPU utilization (current/target value): 19%/80%
+1 node, total of 2 vCPUs with 7.5 GB. idle CPU utilization (current/target value): 19%/80%\color{gray}
 
 AWS was problematic for our usage, and its Kubernetes support was not as mature or functional as GCP's. Heroku was also considered, but it does not support any Kubernetes services or Docker deployments using CI/CD build pipelines. Users can deploy the dockerized application, but it has to be done locally from the user's console using the Heroku CLI.
 
@@ -139,7 +141,7 @@ Discussion
 
 Our final objective is to develop a flexible and scalable distributed architecture for toxic chat classification. At this intermediate stage, we have most of the technical components prototyped at varying levels of completeness. There is a web application that allows users to exchange chat messages and monitor a fixed online chat source. A Multinomial Naive Bayes classifier is invoked by the web framework to classify the web chat messages as either toxic or non-toxic. The application is built as a docker image and deployed onto a Kubernetes pod on Google Cloud Platform. 
 
-It has been challenging to move our classifier from scikit-learn to the PySpark DataFrame-based ML libraries. First, most of the tutorials on PySpark ML libraries are still RDD-based, rather than DataFrame-based. Second, most of the Spark enviornment is tested in the Linux environment, and there are a lot of special setups needed to make it work on Windows. Third, PySpark still do not have great compatibility with other libraries. In order to use common text processing libraries such as nltk or loading pre-trained word2vec model using gensim, we had to either load data using pandas data frame first then convert it to PySpark data frame, or change the underlying pre-trained word2vec model to make it PySpark compatible
+\color{black}It has been challenging to move our classifier from scikit-learn to the PySpark DataFrame-based ML libraries. First, most of the tutorials on PySpark ML libraries are still RDD-based, rather than DataFrame-based. Second, most of the Spark environment is tested in the Linux environment, and there is a lot of special setup needed to make it work on Windows for local development and testing. Third, PySpark has sparse compatibility with other libraries. In order to use common text processing libraries such as NLTK or loading pre-trained word2vec model using gensim, we had to either load data using pandas data frame first then convert it to PySpark data frame, or change the underlying pre-trained word2vec model to make it PySpark compatible\color{gray}
 
 See the next section "Future Work" for details about the work to be undertaken in the coming weeks to develop the final system.
 
@@ -236,9 +238,9 @@ This section summarizes the areas of responsibility of the respective members of
 ## Cindy Tseng
 
 * Multinomial Naive Bayes classifier on Spark and MLlib 
-* scikit-learn and MLlib classifier performance comparison
+* scikit-learn and MLlib classifier performance comparison\color{black}
 * Rewrite Dockerfile to accomodate PySpark enviornment
-* Tested initial deployment of PySpark classifier on google cloud platform
+* Tested initial deployment of PySpark classifier on google cloud platform\color{gray}
 * Code reviews
 * Paper writing
 
