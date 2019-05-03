@@ -129,15 +129,21 @@ class ToxicityClassifier():
         FP = predictions.select("label", "prediction").filter((predictions.label == 0) & (predictions.prediction == 1)).count()
         FN = predictions.select("label", "prediction").filter((predictions.label == 1) & (predictions.prediction == 0)).count()
         total = predictions.select("label").count()
-
+        l1_num = predictions.select('label').filter(predictions.label == 1).count()
+        l0_num = predictions.select('label').filter(predictions.label == 0).count()
+        
         accuracy	= (TP + TN) / total
         l1_precision   = TP / (TP + FP)
         l1_recall      = TP / (TP + FN)
         l1_F1		= 2/(1/l1_precision + 1/l1_precision)
-
+        
         l0_precision   = TN / (TN + FN)
         l0_recall      = TN / (TN + FP)
         l0_F1		= 2/(1/l0_precision + 1/l0_precision)
+
+        weighted_avg_precision = (l1_precision * l1_num + l0_precision * l0_num)/(l1_num + l0_num)
+        weighted_avg_recall = (l1_recall * l1_num + l0_recall * l0_num)/(l1_num + l0_num)
+        weighted_avg_F1 = (l1_F1 * l1_num + l0_F1 * l0_num)/(l1_num + l0_num)
 
         avg_F1 = (l0_F1 + l1_F1)/2
         print('accuracy:', accuracy)
@@ -148,7 +154,12 @@ class ToxicityClassifier():
         print('label 0 precision:', l0_precision)
         print('label 0 recall:', l0_recall)
         print('label 0 F1:', l0_F1)
-        print('avg F1', avg_F1)
+        
+        print('num label 0', l0_num)
+        print('num label 1', l1_num)
+        print('weighted average precision', weighted_avg_precision)
+        print('weighted average recall', weighted_avg_recall)
+        print('weighted average f1', weighted_avg_F1)
         
     def stopClassifier(self):
         # close spark session
