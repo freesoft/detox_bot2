@@ -37,6 +37,11 @@ platforms allow people to express their opinions freely, and stimulate collabora
 
 Thus we propose a new toxic chat filtering system that differentiates itself in that a) its filtering is based on machine learning and deeper contextual analysis, and b) it is deployed as a scalable and easily integrated web framework that can be adapted to any source of text for online interaction of any size. The platform is based on Docker and Kubernetes for easy deployment and dependency management and to allow for fast scale-out to large systems. It uses state-of-the-art distributed systems technology for processing and storage, to allow for rapid scaling to any size while maintaining a shared file space (HDFS) between each Kubernetes Zone. This paper presents the architecture, development, and use of this system in the context of a web chat application and Twitch chatBot as motivating examples.
 
+\color{black}
+The source code and documentation for the project can be found on the following public Github repository:
+https://github.com/freesoft/detox_bot2
+\color{gray}
+
 Datasets
 ========
 
@@ -61,7 +66,7 @@ Method/Design
 
 ## Detox Bot project
 
-The original idea for the toxic chat detoxifier came from the final CS410 project (called "detox_bot" and hosted on Github) of one of the authors. They implemented a simple detoxifier consisting of a Python console application and rudimentary webpage hosted on a Docker image. The motivation for the current project is to re-implement detox_bot as a distributed framework for toxic chat detection, applying the distributed systems technologies covered by the Cloud Computing Applications course at the University of Illinois Urbana-Champaign. The technologies to be applied include Docker containers on Kubernetes pods; IaaS/PaaS deployment on GCP or AWS; Spark; HDFS; a proper load-balanced web application hosted in the cloud, etc. We also wanted to do more formal and deeper research into the other approaches taken to solve the toxic chat classification problem and improve the performance of the classifier itself.
+The original idea for the toxic chat detoxifier came from the final CS410 project (called "detox_bot" and hosted on Github) of one of the authors. They implemented a simple detoxifier consisting of a Python console application and rudimentary webpage hosted on a Docker image. The motivation for the current project is to re-implement detox_bot as a distributed framework for toxic chat detection, applying the distributed systems technologies covered by the Cloud Computing Applications course at the University of Illinois Urbana-Champaign. The technologies to be applied include Docker containers on Kubernetes pods; IaaS/PaaS deployment on GCP; Spark; HDFS; a proper load-balanced web application hosted in the cloud, etc. We also wanted to do more formal and deeper research into the other approaches taken to solve the toxic chat classification problem and improve the performance of the classifier itself.
 
 ## Application framework overview
 
@@ -87,8 +92,13 @@ The web application connects the user to both a webchat and Twitch TV stream. Fo
 
 ### Classifier
 
-We use a Multinomial Naive Bayes classifier with TF-IDF for toxic chat classification. The classifier is trained on the Jigsaw dataset on Kaggle and the resulting model is persisted in serialized form and used for future invocations of the framework. The scikit-learn library was chosen for prototyping the Machine Learning and NLP components because it was easy to use and is supported with many online examples. 
+We use a Multinomial Naive Bayes classifier with TF-IDF for toxic chat classification. The classifier is trained on the Jigsaw dataset on Kaggle and the resulting model is persisted in serialized form and used for future invocations of the framework. The scikit-learn library was chosen for prototyping the Machine Learning and NLP components because it was easy to use and is supported with many online examples. \color{black}The final project uses PySpark with MLlib for improved scalability.
 
+### Container system
+
+The application is deployed to a Kuernetes cluster on Google Cloud Platform (GCP), with load balancing for high availability and scalable performance. The application container is automatically built on GCP when changes are committed to the master branch of the repository. Thus the application team was able to work off of local branches, verify changes via pull requests to a development branch, and then trigger automated builds of the container image in GCP by committing approved changes the master branch.
+
+\color{gray}
 Preliminary Evaluation/Results
 ===============================
 
@@ -192,11 +202,14 @@ Future Work
 
 ## Classifier upgrade
 
-As mentioned above, we are assessing the possibility of replacing the ML and NLP library from scikit-learn with Apache Spark and MLlib. We have already created a running demo that can classify comments at a slightly lower F1 score. We continue tuning and testing the model, and verifying it on Google Cloud Platform prior to committing changes to the repository. 
+\color{black}
+We replaced the ML and NLP library from scikit-learn with Apache Spark and MLlib. The demo that can classify comments at the F1 scores reported above. We continue tuning and testing the model, and verifying it on Google Cloud Platform prior to committing changes to the repository. For future versions beyond the end of the CCA course, we may experiment with deep classifiers (CNNs or RNNs) or ensemble approaches. Future work will add data augmentation to deal with imbalanced classes, and pre-processing to normalize chat text to recognizable terms. Future versions may also include methods to prevent bias by analyzing more contextual information in the chat stream.\color{gray}
 
 ## Better sharing of trained model for classifier
 
 Training the model is expensive, so we do not want to train the classifier everytime the Docker container runs. The application currently saves the trained model to a file (in a serialized format called "pickle" in Python), and then restores the model from the file (if it exists) when it starts up and needs to classify a comment. However, we are expecting to have multiple docker containers running on K8s clusters, so a better way is needed to share the trained model with other K8s pods. We will expore options for this, such as K8s volume pods and Docker volume mounting on HDFS paths, etc. 
+
+\color{black}Another future improvement may allow users to classify messages as toxic or non-toxic, thus allowing for crowd-sourcing of the training data for the classifier.\color{gray}
 
 ## Infrastructure as Code
 
@@ -212,7 +225,7 @@ We may consider RESTful interfaces to allow easier integration of the facilities
 
 ## Load-balanced web application
 
-We will investigate using a load balancer to distribute traffic among several instances of the web application. Also, a complete application will allow plugs ins for different chat sources (Twitter, web forums, Reddit, Wikipedia), with the user able to specify the chat source and channel (currently this is hard-coded). We may also consider user authentication and configuration settings for the web application.
+\color{black}We have created a load-balanced web application on a Kubernetes cluster. Future work may \color{gray}allow plugs ins for different chat sources (Twitter, web forums, Reddit, Wikipedia), with the user able to specify the chat source and channel (currently this is hard-coded). We may also consider user authentication and configuration settings for the web application.
 
 Division of Work (May overlap)
 ==============================
@@ -222,7 +235,9 @@ This section summarizes the areas of responsibility of the respective members of
 ## Wonhee Jung
 
 * Docker design and build
-* Google Cloud Platform and Kubernetes deployment
+* Google Cloud Platform and Kubernetes deployment\color{black}
+* Related works research
+* Team leadership\color{gray}
 * Repository management
 * Code reviews
 * Paper writing
@@ -230,7 +245,8 @@ This section summarizes the areas of responsibility of the respective members of
 ## Kevin Mackie
 
 * Unified web application prototype for web chat and Twitch TV bot
-* Literature review of classification datasets
+* Literature review of classification datasets\color{black}
+* Literature review of related works\color{gray}
 * Framework for paper generation
 * Code reviews
 * Paper writing
