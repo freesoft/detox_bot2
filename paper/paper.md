@@ -92,7 +92,7 @@ The web application connects the user to both a webchat and Twitch TV stream. Fo
 
 ### Classifier
 
-We use a Multinomial Naive Bayes classifier with TF-IDF for toxic chat classification. The classifier is trained on the Jigsaw dataset on Kaggle and the resulting model is persisted in serialized form and used for future invocations of the framework. The scikit-learn library was chosen for prototyping the Machine Learning and NLP components because it was easy to use and is supported with many online examples. \color{black}The final project uses PySpark with MLlib for improved scalability.
+We use a Multinomial Naive Bayes classifier with TF-IDF for toxic chat classification. The classifier is trained on the Jigsaw dataset on Kaggle and the resulting model is persisted in serialized form and used for future invocations of the framework. The scikit-learn library was chosen for prototyping the Machine Learning and NLP components because it was easy to use and is supported with many online examples. \color{black}The final project uses PySpark with ML library for improved scalability.
 
 ### Container system
 
@@ -203,7 +203,7 @@ Future Work
 ## Classifier upgrade
 
 \color{black}
-We replaced the ML and NLP library from scikit-learn with Apache Spark and MLlib. The demo that can classify comments at the F1 scores reported above. We continue tuning and testing the model, and verifying it on Google Cloud Platform prior to committing changes to the repository. For future versions beyond the end of the CCA course, we may experiment with deep classifiers (CNNs or RNNs) or ensemble approaches. Future work will add data augmentation to deal with imbalanced classes, and pre-processing to normalize chat text to recognizable terms. Future versions may also include methods to prevent bias by analyzing more contextual information in the chat stream.\color{gray}
+We replaced the ML and NLP library from scikit-learn with Apache Spark and ML library. The demo that can classify comments at the F1 scores reported above. We continue tuning and testing the model, and verifying it on Google Cloud Platform prior to committing changes to the repository. For future versions beyond the end of the CCA course, we may experiment with deep classifiers (CNNs or RNNs) or ensemble approaches. Future work will add data augmentation to deal with imbalanced classes, and pre-processing to normalize chat text to recognizable terms. Future versions may also include methods to prevent bias by analyzing more contextual information in the chat stream.\color{gray}
 
 ## Better sharing of trained model for classifier
 
@@ -253,8 +253,8 @@ This section summarizes the areas of responsibility of the respective members of
 
 ## Cindy Tseng
 
-* Multinomial Naive Bayes classifier on Spark and MLlib 
-* scikit-learn and MLlib classifier performance comparison\color{black}
+* Multinomial Naive Bayes classifier on Spark with ML library 
+* scikit-learn and PySpark/ML library classifier performance comparison\color{black}
 * Rewrite Dockerfile to accomodate PySpark enviornment
 * Tested initial deployment of PySpark classifier on google cloud platform\color{gray}
 * Code reviews
