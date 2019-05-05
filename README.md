@@ -1,8 +1,19 @@
+This project is done and won't be changed any furture. It is the project that four UIUC MCS-DS CS498 CCA in Spring 2019 students have been working together as class' final project and report. 
+
+* Wonhee Jung (wonheej2@illinois.edu) - University of Illinois Urbana-Champaign<br/>
+* Kevin Mackie (kevindm2@illinois.edu) - University of Illinois Urbana-Champaign<br/>
+* Cindy Tseng (cindyst2@illinois.edu) - University of Illinois Urbana-Champaign<br/>
+* Conrad Harley (harley3@illinos.edu) - University of Illinois Urbana-Champaign<br/>
+
+You can find [final project report](/paper/paper.pdf) if you want to check. The project is fully functional and running on Google Cloud Platform's GKE(Google Kubernetes Engine) cluster, but submitting the running the demo version of app isn't required and since GCP has been charing for the project build and deployhing the app to the clusters, etc, we are not going to run the demo app. 
+
+However, you'll be able to find [relevant wiki docs here](https://github.com/freesoft/detox_bot2/wiki/Google-Cloud-Platform) if you want to try it by yourself.
+
 # detox_bot2
 
 ## General idea for the project
 
-It's for UIUC MCS-DS CS498 CCA project, upgrading and expending the previous [detox_bot](https://github.com/freesoft/detox_bot) project to use more Cloud stuff that we've learned in CS498 CCA class in Spring 2019.
+Detox_bot2 is the project for UIUC MCS-DS CS498 Cloud Computing Applcations project, upgrading and expending the previous [detox_bot](https://github.com/freesoft/detox_bot) project to use more Cloud/distributed solutions that CS498 CCA class in Spring 2019 covers. 
 
 Pleae read the original project's README file to have some understanding for what is it and what we can improve.
 
