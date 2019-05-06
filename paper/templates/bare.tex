@@ -63,6 +63,7 @@ $for(package)$
 \usepackage$if(package.options)$[$package.options$]$endif${$package.name$}
 $endfor$
 
+\usepackage{xcolor}
 \usepackage[style=ieee]{biblatex}
 \bibliography{IEEEabrv,$biblio-files$}
 \renewcommand*{\bibfont}{\footnotesize}
@@ -578,7 +579,7 @@ $endif$
 % use for special paper notices
 %\IEEEspecialpapernotice{(Invited Paper)}
 
-
+\color{gray}
 
 % make the title area
 $if(title)$

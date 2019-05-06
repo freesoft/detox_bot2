@@ -40,8 +40,8 @@ def handle_my_custom_event(msg, methods=['GET', 'POST']):
     toxicityClassifier = ToxicityClassifier()
 
     print('received my event: username:' + msg['username'] + ', message:' + msg['message'] )
-    print('chat toxicity analyzed...' + str(toxicityClassifier.isToxic( msg['message'] )))
-    if toxicityClassifier.isToxic(msg['message']) == True:
+    print('chat toxicity analyzed...' + str(toxicityClassifier.txtIsToxic( msg['message'] )))
+    if toxicityClassifier.txtIsToxic(msg['message']) == True:
         socketio.emit('my response', { 'username': msg['username'], 'message': msg['message'], 'is_toxic': '1'}, callback=messageReceived)
     else:
         socketio.emit('my response', { 'username': msg['username'], 'message': msg['message'], 'is_toxic': '0'}, callback=messageReceived)
